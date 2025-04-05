@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mix Maker</title>
+    <link rel="stylesheet" href="./static/css/style.css">
+    <script src="./static/bundle/script.js" defer></script>
+  </head>
+  <body>
+    <div>Loaded graph of <span id="nodes"></span> nodes.</div>
+    <div>
+      <input type="number" id="depth" value="5" width="5"/>
+      <input type="checkbox" id="linear"/>
+      <button id="load">Load</button>
+    </div>
+    <div>
+      <select name="drug", id="base"></select>
+    </div>
+    <div id="selection">
+    </div>
+    <div>
+      <button id="calc">Find best option</button>
+    </div>
+    <div id="error" hidden>
+
+    </div>
+    <div id="result" hidden>
+      <p>Found drug worth: <span id="drugValue">$</span></p>
+      <p>Drug hast the effects:</p>
+      <ul id="effects">
+
+      </ul>
+      <p>Combination to reach it</p>
+      <ul id="path">
+
+      </ul>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+#selection {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 5px;
+}
+
+#depth {
+  width: calc(2ch + 20px);
+}
+
+#selection label {
+  padding: 4px;
+}

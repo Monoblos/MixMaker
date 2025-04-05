@@ -1,0 +1,7 @@
+{
+  "tabWidth": 2,
+  "printWidth": 160,
+  "plugins": ["prettier-plugin-sort-json"],
+  "jsonRecursiveSort": true,
+  "jsonSortOrder": "{\"*\": \"lexical\"}"
+}

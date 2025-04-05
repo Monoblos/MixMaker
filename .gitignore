@@ -1,4 +1,4 @@
-**/*.js
+public/static/bundle/*
 package-lock.json
 tsconfig.tsbuildinfo
 node_modules

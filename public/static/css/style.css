@@ -1,7 +1,14 @@
+body > * {
+  padding: 5px;
+}
+
 #selection {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  padding: 5px;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(var(--min-content,160px), max-content)
+  );
+  gap: 5px;
 }
 
 #depth {

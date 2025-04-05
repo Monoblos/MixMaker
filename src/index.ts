@@ -33,6 +33,10 @@ calc.addEventListener("click", () => {
   const targetSelection = <NodeListOf<HTMLInputElement>>document.getElementsByName("effect");
   const combination = [...targetSelection.values()].filter((c) => c.checked).map((c) => c.value) as EffectName[];
 
+  if (combination.length === 0) {
+    showError("Nothing selected! Select at least one option from the list above.");
+    return;
+  }
   if (combination.length > 8) {
     showError("Too many options! Maximum possible effects at once is 8");
     return;

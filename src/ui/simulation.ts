@@ -8,6 +8,10 @@ const dragState = {
   after: true,
   lastY: 0
 }
+const preview = {
+  active: true,
+  index: 100
+}
 
 export function initSimulation() {
   const draggableElements = <NodeListOf<HTMLParagraphElement>>document.querySelectorAll("#simulator #ingredients > p");
@@ -15,6 +19,12 @@ export function initSimulation() {
 
   draggableElements.forEach((elem) => {
     elem.addEventListener("dragstart", dragStartHandler);
+    elem.addEventListener("dragend", () => {
+      const styleSheet = document.styleSheets.item(0)!;
+      if (styleSheet.cssRules.item(0)?.cssText.startsWith("#selectedSteps::before")) {
+        styleSheet.deleteRule(0);
+      }
+    });
   });
   
   dropArea.addEventListener("dragover", dragOverHandler, false);
@@ -40,6 +50,7 @@ function dragOverHandler(ev: DragEvent) {
   if (realTarget === null) {
     dragState.index = dropArea.childElementCount - 1;
     dragState.after = true;
+    updateIndicator();
     return;
   }
   const index = [...dropArea.childNodes.values()].indexOf(realTarget);
@@ -52,9 +63,20 @@ function dragOverHandler(ev: DragEvent) {
     dragState.after = true;
   } else if (ev.clientY < dragState.lastY) {
     dragState.after = false;
+  } else {
+    // Do nothing if there is no Y movement
   }
   dragState.lastY = ev.clientY;
-  // Do nothing if there is no Y movement
+  updateIndicator();
+}
+
+function updateIndicator() {
+  const cssText = `{ border: 1px solid blue; content: ""; position: absolute; width: 110px; margin-top: ${15 + (32 * dragState.index) + (dragState.after ? 16 : -16)}px; }`;
+  const styleSheet = document.styleSheets.item(0)!;
+  if (styleSheet.cssRules.item(0)?.cssText.startsWith("#selectedSteps::before")) {
+    styleSheet.deleteRule(0);
+  }
+  styleSheet.insertRule("#selectedSteps::before " + cssText);
 }
 
 function dropHandler(ev: DragEvent) {
@@ -78,6 +100,23 @@ function dropHandler(ev: DragEvent) {
   const toAdd = document.createElement("p");
   toAdd.appendChild(textContent);
   toAdd.appendChild(xMark);
+  toAdd.addEventListener("mouseenter", (ev) => {
+    const realTarget = (<HTMLElement>ev.target).closest("p");
+    if (realTarget === null) {
+      preview.index = 100;
+      return;
+    }
+    const index = [...dropArea.childNodes.values()].indexOf(realTarget);
+    if (index === -1) {
+      return;
+    }
+    preview.index = index;
+    recalcSimulation();
+  });
+  toAdd.addEventListener("mouseleave", (ev) => {
+    preview.index = 100;
+    recalcSimulation();
+  });
 
   const dropIndex = dragState.index;
   const after = dragState.after;
@@ -100,7 +139,8 @@ function recalcSimulation() {
   let realDrug = drug();
 
   const selectedSteps = <NodeListOf<HTMLSpanElement>>document.querySelectorAll("#simulator #selectedSteps > p > :first-child");
-  selectedSteps.forEach(element => {
+  selectedSteps.forEach((element, index) => {
+    if (index > preview.index) return;
     realDrug.apply(substanceMap[element.innerText as SubstanceName]);
   });
 

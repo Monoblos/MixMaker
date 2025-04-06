@@ -3,6 +3,7 @@ import { effectMap, type EffectName } from "./data/effects";
 import { substanceMap, type SubstanceName } from "./data/substances";
 import { Mapper } from "./drupmapper/mapper";
 import { initDrugDropdown, initIngredients, initTargetOptions } from "./ui/initinputs";
+import { initOptimizer } from "./ui/optimizer";
 import { clear, showError, showResult } from "./ui/output";
 import { findRecipe } from "./ui/recipe";
 import { initSimulation } from "./ui/simulation";
@@ -47,5 +48,7 @@ calc.addEventListener("click", () => {
 
 // Simulation
 initSimulation();
+
+initOptimizer();
 
 (<any>window).mapper = mapper;

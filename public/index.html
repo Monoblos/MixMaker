@@ -16,7 +16,7 @@
         <option>Please Select</option>
         <option value="recipe">Recipe finder</option>
         <option value="simulator">Simulator</option>
-        <option value="optimizer">Time optimizer</option>
+        <option value="optimizer">Profit optimizer</option>
       </select>
     </div>
 
@@ -54,7 +54,14 @@
     </div>
 
     <div id="optimizer" hidden>
-      
+      <div>
+        <label for="base">Select base drug:</label>
+        <select name="drug", id="base"></select>
+      </div>
+      <div style="padding: 5px;">
+        <input type="number" id="steps" value="3" width="5"/>
+        <button id="find">Find</button>
+      </div>
     </div>
   
     <!-- Output area, always visible -->

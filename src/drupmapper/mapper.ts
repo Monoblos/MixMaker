@@ -14,16 +14,47 @@ export class Mapper {
   private edgeNames = new Map<string, SubstanceName>();
   private nodes = new Set<string>();
 
+  public mostExpensive = {
+    id: "[]",
+    price: 0
+  };
+  public mostExpensivePerStep = {
+    id: "[]",
+    price: 0
+  };;
+
   public constructor() { }
 
   public get nodeCount() {
     return this.nodes.size;
   }
 
-  public init(maxDepth = 5, linear = false) {
+  private updateMaxPrice(drug: Drug, depth: number) {
+    const id = drug.id;
+    const price = drug.price;
+    if (this.mostExpensive.price < price) {
+      this.mostExpensive.price = price;
+      this.mostExpensive.id = id;
+    }
+    const perStep = (price - drug.baseprice) / depth;
+    if (this.mostExpensivePerStep.price < perStep) {
+      this.mostExpensivePerStep.price = perStep;
+      this.mostExpensivePerStep.id = id;
+    }
+  }
+
+  public init(maxDepth = 5, linear = false, startDrug?: Drug) {
     // Reset variables
     this.edgeNames = new Map();
     this.nodes = new Set();
+    this.mostExpensive = {
+      id: "[]",
+      price: 0
+    };
+    this.mostExpensivePerStep = {
+      id: "[]",
+      price: 0
+    };
 
     // Routes for the graph we are calculating
     const routes: Record<string, Record<string, number>> = {};
@@ -32,12 +63,16 @@ export class Mapper {
     // Layers of tests made
     const layers: Layer[] = [];
     // Initial layer containing all base drugs
-    const startLayer: Layer = new Set();
+    let startLayer: Layer = new Set();
 
     // Fill the start layer
-    for (const key of Object.keys(drugs)) {
-      const drug = drugs[key as keyof typeof drugs]!;
-      startLayer.add(drug().id);
+    if (!startDrug) {
+      for (const key of Object.keys(drugs)) {
+        const drug = drugs[key as keyof typeof drugs]!;
+        startLayer.add(drug().id);
+      }
+    } else {
+      startLayer.add(startDrug.id);
     }
     layers.push(startLayer);
     
@@ -60,8 +95,9 @@ export class Mapper {
         // Check result for each substance we can apply
         for (const substance of Object.values(substanceMap)) {
           // Create resulting drug and "save" it to the layer
-          const drug = new Drug(0, baseEffects);
+          const drug = new Drug(startDrug ? startDrug.baseprice : 0, baseEffects);
           drug.apply(substance);
+          this.updateMaxPrice(drug, i + 1);
           const drugId = drug.id;
           layer.add(drugId);
           routes[key][drugId] = linear ? 1 : substance.price;
@@ -77,6 +113,7 @@ export class Mapper {
 
     const lastLayer = layers[layers.length - 1]!;
     for (const entry of lastLayer) {
+      if (this.nodes.has(entry)) continue;
       routes[entry] = {};
       this.nodes.add(entry);
     }

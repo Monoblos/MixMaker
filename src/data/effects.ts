@@ -52,7 +52,7 @@ export const effectMap: Record<EffectName, Effect> = {
   "Electrifying": new Effect("Electrifying", 0.5, "Electric sparks around the body"),
   "Energizing": new Effect("Energizing", 0.22),
   "Euphoric": new Effect("Euphoric", 0.18),
-  "Explosive": new Effect("Explosive", 0),
+  "Explosive": new Effect("Explosive", 0, "Explode after a short timer"),
   "Focused": new Effect("Focused", 0.16),
   "Foggy": new Effect("Foggy", 0.36, "Fog/Smoke around body. Max sight distance limited"),
   "Gingeritis": new Effect("Gingeritis", 0.2, "Hair changes to red"),
@@ -73,7 +73,7 @@ export const effectMap: Record<EffectName, Effect> = {
   "Spicy": new Effect("Spicy", 0.38, "Bright burning head"),
   "Thought-Provoking": new Effect("Thought-Provoking", 0.44),
   "Toxic": new Effect("Toxic", 0, "Puke"),
-  "Tropic Thunder": new Effect("Tropic Thunder", 0.46),
+  "Tropic Thunder": new Effect("Tropic Thunder", 0.46, "Invert skin color"),
   "Zombifying": new Effect("Zombifying", 0.58)
 }
 

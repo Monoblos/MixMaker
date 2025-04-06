@@ -5,6 +5,7 @@ const output = <HTMLDivElement>document.getElementById("result");
 const errorOut = <HTMLDivElement>document.getElementById("error");
 const drugValue = <HTMLSpanElement>document.getElementById("drugValue");
 const effects = <HTMLUListElement>document.getElementById("effects");
+const pathText = <HTMLParagraphElement>document.getElementById("pathText");
 const path = <HTMLUListElement>document.getElementById("path");
 
 export function showError(text: string) {
@@ -13,7 +14,7 @@ export function showError(text: string) {
   output.hidden = true;
 }
 
-export function showResult(drug: Drug, chain: SubstanceName[]) {
+export function showResult(drug: Drug, chain?: SubstanceName[]) {
   errorOut.hidden = true;
   output.hidden = false;
   drugValue.innerText = drug.price + "";
@@ -24,10 +25,22 @@ export function showResult(drug: Drug, chain: SubstanceName[]) {
     effects.appendChild(elem);
   }
 
-  path.innerHTML = "";
-  for (const chainLink of chain) {
-    const elem = document.createElement("li");
-    elem.innerText = chainLink;
-    path.appendChild(elem);
+  if (chain) {
+    pathText.hidden = false;
+    path.hidden = false;
+    path.innerHTML = "";
+    for (const chainLink of chain) {
+      const elem = document.createElement("li");
+      elem.innerText = chainLink;
+      path.appendChild(elem);
+    }
+  } else {
+    pathText.hidden = true;
+    path.hidden = true;
   }
+}
+
+export function clear() {
+  errorOut.hidden = true;
+  output.hidden = true;
 }

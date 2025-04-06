@@ -2,61 +2,50 @@ import { Drug, drugs } from "./data/drug";
 import { effectMap, type EffectName } from "./data/effects";
 import { substanceMap, type SubstanceName } from "./data/substances";
 import { Mapper } from "./drupmapper/mapper";
-import { initDrugDropdown, initTargetOptions } from "./ui/initinputs";
-import { showError, showResult } from "./ui/output";
+import { initDrugDropdown, initIngredients, initTargetOptions } from "./ui/initinputs";
+import { clear, showError, showResult } from "./ui/output";
+import { findRecipe } from "./ui/recipe";
+import { initSimulation } from "./ui/simulation";
 
-const output = <HTMLDivElement>document.getElementById("result");
-const errorOut = <HTMLDivElement>document.getElementById("error");
-const depth = <HTMLInputElement>document.getElementById("depth");
-const linear = <HTMLInputElement>document.getElementById("linear");
-const nodes = <HTMLSpanElement>document.getElementById("nodes");
-const load = <HTMLButtonElement>document.getElementById("load");
-const calc = <HTMLButtonElement>document.getElementById("calc");
-const drugDropdown = <HTMLSelectElement>document.getElementById("base");
+const tool = <HTMLSelectElement>document.getElementById("tool");
+const tools = {
+  recipe: <HTMLDivElement>document.querySelector("#recipe"),
+  simulator: <HTMLDivElement>document.querySelector("#simulator"),
+  optimizer: <HTMLDivElement>document.querySelector("#optimizer")
+}
+document.querySelector
 
 // Init dropdowns
 initDrugDropdown();
 initTargetOptions();
-
+initIngredients();
 
 const mapper = new Mapper();
 
+// Tool selection
+tool.addEventListener("change", (e) => {
+  clear();
+  for (const [key, value] of Object.entries(tools)) {
+    value.hidden = key !== tool.value;
+  }
+});
+
+// Recipe
+const load = <HTMLButtonElement>document.querySelector("#recipe #load");
+const depth = <HTMLInputElement>document.querySelector("#recipe #depth");
+const linear = <HTMLInputElement>document.querySelector("#recipe #linear");
+const nodes = <HTMLSpanElement>document.querySelector("#recipe #nodes");
 load.addEventListener("click", () => {
   mapper.init(depth.valueAsNumber, linear.checked);
   nodes.innerText = mapper.nodeCount + "";
+  (<HTMLDivElement>document.querySelector("#recipe #withGraph")).hidden = false;
 });
-
+const calc = <HTMLButtonElement>document.querySelector("#recipe #calc");
 calc.addEventListener("click", () => {
-  const drug = drugs[drugDropdown.value];
-  if (!drug) throw new Error("Invalid drug input selected");
-
-  const targetSelection = <NodeListOf<HTMLInputElement>>document.getElementsByName("effect");
-  const combination = [...targetSelection.values()].filter((c) => c.checked).map((c) => c.value) as EffectName[];
-
-  if (combination.length === 0) {
-    showError("Nothing selected! Select at least one option from the list above.");
-    return;
-  }
-  if (combination.length > 8) {
-    showError("Too many options! Maximum possible effects at once is 8");
-    return;
-  }
-
-  let result: SubstanceName[];
-  try {
-    result = mapper.findRecipe(drug(), combination);
-  } catch (e) {
-    if (e instanceof Error) {
-      showError(e.message);
-      return;
-    }
-    throw e;
-  }
-  const resultDrug = drug();
-  for (const sub of result) {
-    resultDrug.apply(substanceMap[sub]);
-  }
-  showResult(resultDrug, result);
+  findRecipe(mapper);
 });
+
+// Simulation
+initSimulation();
 
 (<any>window).mapper = mapper;

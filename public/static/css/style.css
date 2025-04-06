@@ -1,4 +1,4 @@
-body > * {
+body > :first-child, #withGraph > *, #simulator > *, #optimizer > * {
   padding: 5px;
 }
 
@@ -17,4 +17,36 @@ body > * {
 
 #selection label {
   padding: 4px;
+}
+
+#stepSelection {
+  display: flex;
+  flex-direction: row;
+}
+
+#stepSelection > div {
+  border: 1px solid black;
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  min-width: 110px;
+}
+
+#stepSelection > div > p {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 3px;
+  margin: 3px;
+  user-select: none;
+  cursor: grab;
+}
+
+#selectedSteps > p {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.clickable {
+  cursor: pointer;
 }

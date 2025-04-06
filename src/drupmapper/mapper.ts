@@ -40,7 +40,6 @@ export class Mapper {
       startLayer.add(drug().id);
     }
     layers.push(startLayer);
-    console.log(`startLayer has ${startLayer.size} entries`);
     
     // Build a depth-tree with the specified depth
     for (let i = 0; i < maxDepth; i++) {

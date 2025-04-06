@@ -9,33 +9,63 @@
     <script src="./static/bundle/script.js" defer></script>
   </head>
   <body>
-    <div>Loaded graph of <span id="nodes">0</span> nodes.</div>
+    <!-- Tool selection, always visible -->
     <div>
-      <input type="number" id="depth" value="5" width="5"/>
-      <input type="checkbox" id="linear"/>
-      <button id="load">Load</button>
+      <label for="tool">Select what tool you want:</label>
+      <select id="tool">
+        <option>Please Select</option>
+        <option value="recipe">Recipe finder</option>
+        <option value="simulator">Simulator</option>
+        <option value="optimizer">Time optimizer</option>
+      </select>
     </div>
-    <div>
-      <select name="drug", id="base"></select>
-    </div>
-    <div id="selection">
-    </div>
-    <div>
-      <button id="calc">Find best option</button>
-    </div>
-    <div id="error" hidden>
 
+    
+    <!-- Recipe finder tool -->
+    <div id="recipe" hidden>
+      <div style="padding: 5px;">
+        <input type="number" id="depth" value="5" width="5"/>
+        <input type="checkbox" id="linear"/>
+        <button id="load">Load</button>
+      </div>
+      <div id="withGraph" hidden>
+        <div id="loadResult">Loaded graph of <span id="nodes">0</span> nodes.</div>
+        <div>
+          <label for="base">Select base drug:</label>
+          <select name="drug", id="base"></select>
+        </div>
+        <div id="selection">
+        </div>
+        <div>
+          <button id="calc">Find best option</button>
+        </div>
+      </div>
     </div>
+
+    <div id="simulator" hidden>
+      <div>
+        <label for="base">Select base drug:</label>
+        <select name="drug", id="base"></select>
+      </div>
+      <div id="stepSelection" name="dndarea">
+        <div id="selectedSteps"></div>
+        <div id="ingredients"></div>
+      </div>
+    </div>
+
+    <div id="optimizer" hidden>
+      
+    </div>
+  
+    <!-- Output area, always visible -->
+    <div id="error" hidden></div>
     <div id="result" hidden>
       <p>Found drug worth: <span id="drugValue">$</span></p>
       <p>Drug hast the effects:</p>
-      <ul id="effects">
-
-      </ul>
-      <p>Combination to reach it</p>
-      <ul id="path">
-
-      </ul>
+      <ul id="effects"></ul>
+      <p id="pathText">Combination to reach it</p>
+      <ul id="path"></ul>
     </div>
+    <p id="debug"></p>
   </body>
 </html>

@@ -1,10 +1,10 @@
 import { drugs } from "../data/drug";
 import { EffectName } from "../data/effects";
 import { substanceMap, SubstanceName } from "../data/substances";
-import { Mapper } from "../drupmapper/mapper";
+import { GraphMapper } from "../drupmapper/graphmapper";
 import { showError, showResult } from "./output";
 
-export function findRecipe(mapper: Mapper) {
+export function findRecipe(mapper: GraphMapper) {
   const drugDropdown = <HTMLSelectElement>document.querySelector("#recipe #base");
   const drug = drugs[drugDropdown.value];
   if (!drug) throw new Error("Invalid drug input selected");

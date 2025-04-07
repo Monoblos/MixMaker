@@ -1,7 +1,7 @@
 import { Drug, drugs } from "./data/drug";
 import { effectMap, type EffectName } from "./data/effects";
 import { substanceMap, type SubstanceName } from "./data/substances";
-import { Mapper } from "./drupmapper/mapper";
+import { GraphMapper } from "./drupmapper/graphmapper";
 import { initDrugDropdown, initIngredients, initTargetOptions } from "./ui/initinputs";
 import { initOptimizer } from "./ui/optimizer";
 import { clear, showError, showResult } from "./ui/output";
@@ -21,7 +21,7 @@ initDrugDropdown();
 initTargetOptions();
 initIngredients();
 
-const mapper = new Mapper();
+const mapper = new GraphMapper();
 
 // Tool selection
 tool.addEventListener("change", (e) => {

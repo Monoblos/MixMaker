@@ -1,9 +1,9 @@
 import { Drug, drugs } from "../data/drug";
 import { substanceMap } from "../data/substances";
-import { Mapper } from "../drupmapper/mapper";
+import { GraphMapper } from "../drupmapper/graphmapper";
 import { showResult } from "./output";
 
-const mapper = new Mapper();
+const mapper = new GraphMapper();
 
 export function initOptimizer() {
   const find = <HTMLButtonElement>document.querySelector("#optimizer #find");
@@ -21,8 +21,6 @@ export function initOptimizer() {
 function findBest(drug: () => Drug, steps: number) {
   mapper.init(steps, true, drug());
 
-  console.log(mapper.mostExpensive.id);
-  console.log(mapper.mostExpensive.price);
   const result = mapper.findRecipe(drug(), JSON.parse(mapper.mostExpensive.id));
 
   const resultDrug = drug();

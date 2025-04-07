@@ -4,7 +4,6 @@ import { substanceMap } from "../data/substances";
 
 export function initDrugDropdown() {
   const drugDropdown = <NodeListOf<HTMLSelectElement>>document.getElementsByName("drug");
-  console.log(`Adding drug names to ${drugDropdown.length} dropdowns`);
   for (const [name, drug] of Object.entries(drugs).map(([k, d]) => [k, d()]) as [string, Drug][]) {
     drugDropdown.forEach((elem) => {
       const option = document.createElement("option");

@@ -9,7 +9,7 @@ function buildEdgeName(from: string, to: string) {
   return from + "-" + to;
 }
 
-export class Mapper {
+export class GraphMapper {
   private graph = new Graph();
   private edgeNames = new Map<string, SubstanceName>();
   private nodes = new Set<string>();

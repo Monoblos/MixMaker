@@ -36,7 +36,7 @@ export class GraphMapper {
       this.mostExpensive.price = price;
       this.mostExpensive.id = id;
     }
-    const perStep = (price - drug.baseprice) / depth;
+    const perStep = (price - drug.baseprice) / (depth + 1);
     if (this.mostExpensivePerStep.price < perStep) {
       this.mostExpensivePerStep.price = perStep;
       this.mostExpensivePerStep.id = id;

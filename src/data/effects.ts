@@ -1,38 +1,60 @@
-export type EffectName = 
-  "Anti-Gravity" |
-  "Athletic" |
-  "Balding" |
-  "Bright-Eyed" |
-  "Calming" |
-  "Calorie-Dense" |
-  "Cyclopean" |
-  "Disorienting" |
-  "Electrifying" |
-  "Energizing" |
-  "Euphoric" |
-  "Explosive" |
-  "Focused" |
-  "Foggy" |
-  "Gingeritis" |
-  "Glowing" |
-  "Jennerising" |
-  "Laxative" |
-  "Long Faced" |
-  "Munchies" |
-  "Paranoia" |
-  "Refreshing" |
-  "Schizophrenia" |
-  "Sedating" |
-  "Seizure-Inducing" |
-  "Shrinking" |
-  "Slippery" |
-  "Smelly" |
-  "Sneaky" |
-  "Spicy" |
-  "Thought-Provoking" |
-  "Toxic" |
-  "Tropic Thunder" |
-  "Zombifying";
+export const effectNames = [
+  "Anti-Gravity",
+  "Athletic",
+  "Balding",
+  "Bright-Eyed",
+  "Calming",
+  "Calorie-Dense",
+  "Cyclopean",
+  "Disorienting",
+  "Electrifying",
+  "Energizing",
+  "Euphoric",
+  "Explosive",
+  "Focused",
+  "Foggy",
+  "Gingeritis",
+  "Glowing",
+  "Jennerising",
+  "Laxative",
+  "Long Faced",
+  "Munchies",
+  "Paranoia",
+  "Refreshing",
+  "Schizophrenia",
+  "Sedating",
+  "Seizure-Inducing",
+  "Shrinking",
+  "Slippery",
+  "Smelly",
+  "Sneaky",
+  "Spicy",
+  "Thought-Provoking",
+  "Toxic",
+  "Tropic Thunder",
+  "Zombifying"
+] as const;
+export type EffectName = typeof effectNames[number];
+
+const idLength = 4;
+export function getEffectId(effect: EffectName) {
+  return effect.substring(0, idLength);
+}
+export function getEffectNameById(effectId: string): EffectName {
+  const effect = effectNames.find((en) => en.startsWith(effectId));
+  if (!effect) throw new Error("Invalid Effect ID: " + effectId);
+  return effect; 
+}
+export function minimizeEffectList(effects: EffectName[]) {
+  return effects.map((e) => getEffectId(e)).join("");
+}
+export function getEffectList(effectIdList: string): EffectName[] {
+  const result: EffectName[] = [];
+  for (let i = 0; i < effectIdList.length; i += idLength) {
+    result.push(getEffectNameById(effectIdList.substring(i, i + idLength)));
+  }
+  return result;
+}
 
 export class Effect {
   public constructor(public name: EffectName, public multiplier: number, public consumedEffect?: string) {
@@ -66,7 +88,7 @@ export const effectMap: Record<EffectName, Effect> = {
   "Schizophrenia": new Effect("Schizophrenia", 0),
   "Sedating": new Effect("Sedating", 0.26, "Get tired: Lagging camera and black outline"),
   "Seizure-Inducing": new Effect("Seizure-Inducing", 0),
-  "Shrinking": new Effect("Shrinking", 0),
+  "Shrinking": new Effect("Shrinking", 0.6),
   "Slippery": new Effect("Slippery", 0.34),
   "Smelly": new Effect("Smelly", 0),
   "Sneaky": new Effect("Sneaky", 0.24),

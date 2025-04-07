@@ -2,9 +2,45 @@ import { drugs } from "../data/drug";
 import { EffectName } from "../data/effects";
 import { substanceMap, SubstanceName } from "../data/substances";
 import { GraphMapper } from "../drupmapper/graphmapper";
-import { showError, showResult } from "./output";
+import { Mapper } from "../drupmapper/mapper";
+import { TreeMapper } from "../drupmapper/treemapper";
+import { setLoading, showError, showResult, stopLoading } from "./output";
 
-export function findRecipe(mapper: GraphMapper) {
+const graph = new GraphMapper();
+const tree = new TreeMapper();
+
+const mapper = tree;
+
+(<any>window).graph = graph;
+(<any>window).tree = tree;
+
+export function initRecipe() {
+  const load = <HTMLButtonElement>document.querySelector("#recipe #load");
+  const depth = <HTMLInputElement>document.querySelector("#recipe #depth");
+  const linear = <HTMLInputElement>document.querySelector("#recipe #linear");
+  const nodes = <HTMLSpanElement>document.querySelector("#recipe #nodes");
+  const drugDropdown = <HTMLSelectElement>document.querySelector("#recipe #base");
+  load.addEventListener("click", () => {
+    const configArea = <HTMLDivElement>document.querySelector("#recipe #withGraph");
+    configArea.hidden = true;
+    load.disabled = true;
+    setLoading();
+    setTimeout(() => {
+      const drug = drugs[drugDropdown.value];
+      mapper.init(depth.valueAsNumber, linear.checked, drug());
+      nodes.innerText = mapper.nodeCount + "";
+      configArea.hidden = false;
+      load.disabled = false;
+      stopLoading();
+    });
+  });
+  const calc = <HTMLButtonElement>document.querySelector("#recipe #calc");
+  calc.addEventListener("click", () => {
+    findRecipe(mapper);
+  });
+}
+
+export function findRecipe(mapper: Mapper) {
   const drugDropdown = <HTMLSelectElement>document.querySelector("#recipe #base");
   const drug = drugs[drugDropdown.value];
   if (!drug) throw new Error("Invalid drug input selected");

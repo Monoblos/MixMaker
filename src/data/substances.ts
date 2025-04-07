@@ -1,38 +1,43 @@
 import type { EffectName } from "./effects";
 
-export type SubstanceName =
-  "Addy" |
-  "Banana" |
-  "Battery" |
-  "Chili" |
-  "Cuke" |
-  "Donut" |
-  "Energy Drink" |
-  "Flu Medicine" |
-  "Gasoline" |
-  "Horse Semen" |
-  "Iodine" |
-  "Mega Bean" |
-  "Motor Oil" |
-  "Mouth Wash" |
-  "Paracetamol" |
-  "Viagra";
+export const substanceTypes = [
+  "Addy",
+  "Banana",
+  "Battery",
+  "Chili",
+  "Cuke",
+  "Donut",
+  "Energy Drink",
+  "Flu Medicine",
+  "Gasoline",
+  "Horse Semen",
+  "Iodine",
+  "Mega Bean",
+  "Motor Oil",
+  "Mouth Wash",
+  "Paracetamol",
+  "Viagra"] as const;
+export type SubstanceName = typeof substanceTypes[number];
+
+const substanceIds = substanceTypes.map((st) => st.substring(0, 3));
+export type SubstanceId = typeof substanceIds[number];
 
 export class Substance {
+  public id: SubstanceId;
   public constructor(public name: SubstanceName, public price: number, public baseEffect: EffectName, public effectReplacements: Array<[EffectName, EffectName]>) {
-
+    this.id = name.substring(0, 3);
   }
 }
 
-export const substanceMap: Record<SubstanceName, Substance> = {
-  "Addy": new Substance("Addy", 9, "Thought-Provoking", [
+const substances = [
+  new Substance("Addy", 9, "Thought-Provoking", [
     ["Sedating", "Gingeritis"],
     ["Long Faced", "Electrifying"],
     ["Glowing", "Refreshing"],
     ["Foggy", "Energizing"],
     ["Explosive", "Euphoric"]
   ]),
-  "Banana": new Substance("Banana", 2, "Gingeritis", [
+  new Substance("Banana", 2, "Gingeritis", [
     ["Energizing", "Thought-Provoking"],
     ["Calming", "Sneaky"],
     ["Toxic", "Smelly"],
@@ -43,7 +48,7 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Paranoia", "Jennerising"],
     ["Smelly", "Anti-Gravity"]
   ]),
-  "Battery": new Substance("Battery", 8, "Bright-Eyed", [
+  new Substance("Battery", 8, "Bright-Eyed", [
     ["Munchies", "Tropic Thunder"],
     ["Euphoric", "Zombifying"],
     ["Electrifying", "Euphoric"],
@@ -52,7 +57,7 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Cyclopean", "Glowing"],
     ["Shrinking", "Munchies"]
   ]),
-  "Chili": new Substance("Chili", 7, "Spicy", [
+  new Substance("Chili", 7, "Spicy", [
     ["Athletic", "Euphoric"],
     ["Anti-Gravity", "Tropic Thunder"],
     ["Sneaky", "Bright-Eyed"],
@@ -60,7 +65,7 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Laxative", "Long Faced"],
     ["Shrinking", "Refreshing"]
   ]),
-  "Cuke": new Substance("Cuke", 2, "Energizing", [
+  new Substance("Cuke", 2, "Energizing", [
     ["Toxic", "Euphoric"],
     ["Slippery", "Munchies"],
     ["Sneaky", "Paranoia"],
@@ -69,7 +74,7 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Munchies", "Athletic"],
     ["Euphoric", "Laxative"]
   ]),
-  "Donut": new Substance("Donut", 3, "Calorie-Dense", [
+  new Substance("Donut", 3, "Calorie-Dense", [
     ["Calorie-Dense", "Explosive"],
     ["Balding", "Sneaky"],
     ["Anti-Gravity", "Slippery"],
@@ -77,7 +82,7 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Focused", "Euphoric"],
     ["Shrinking", "Energizing"]
   ]),
-  "Energy Drink": new Substance("Energy Drink", 6, "Athletic", [
+  new Substance("Energy Drink", 6, "Athletic", [
     ["Sedating", "Munchies"],
     ["Euphoric", "Energizing"],
     ["Spicy", "Euphoric"],
@@ -89,7 +94,7 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Schizophrenia", "Balding"],
     ["Focused", "Shrinking"]
   ]),
-  "Flu Medicine": new Substance("Flu Medicine", 5, "Sedating", [
+  new Substance("Flu Medicine", 5, "Sedating", [
     ["Calming", "Bright-Eyed"],
     ["Athletic", "Munchies"],
     ["Thought-Provoking", "Gingeritis"],
@@ -101,7 +106,7 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Electrifying", "Refreshing"],
     ["Shrinking", "Paranoia"]
   ]),
-  "Gasoline": new Substance("Gasoline", 5, "Toxic", [
+  new Substance("Gasoline", 5, "Toxic", [
     ["Gingeritis", "Smelly"],
     ["Jennerising", "Sneaky"],
     ["Sneaky", "Tropic Thunder"],
@@ -114,12 +119,12 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Electrifying", "Disorienting"],
     ["Shrinking", "Focused"]
   ]),
-  "Horse Semen": new Substance("Horse Semen", 9, "Long Faced", [
+  new Substance("Horse Semen", 9, "Long Faced", [
     ["Anti-Gravity", "Calming"],
     ["Gingeritis", "Refreshing"],
     ["Thought-Provoking", "Electrifying"]
   ]),
-  "Iodine": new Substance("Iodine", 8, "Jennerising", [
+  new Substance("Iodine", 8, "Jennerising", [
     ["Calming", "Balding"],
     ["Toxic", "Sneaky"],
     ["Foggy", "Paranoia"],
@@ -127,7 +132,7 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Euphoric", "Seizure-Inducing"],
     ["Refreshing", "Thought-Provoking"]
   ]),
-  "Mega Bean": new Substance("Mega Bean", 7, "Foggy", [
+  new Substance("Mega Bean", 7, "Foggy", [
     ["Energizing", "Cyclopean"],
     ["Calming", "Glowing"],
     ["Sneaky", "Calming"],
@@ -141,20 +146,20 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Thought-Provoking", "Cyclopean"],
     ["Shrinking", "Electrifying"]
   ]),
-  "Motor Oil": new Substance("Motor Oil", 6, "Slippery", [
+  new Substance("Motor Oil", 6, "Slippery", [
     ["Energizing", "Munchies"],
     ["Foggy", "Toxic"],
     ["Euphoric", "Sedating"],
     ["Paranoia", "Anti-Gravity"],
     ["Munchies", "Schizophrenia"]
   ]),
-  "Mouth Wash": new Substance("Mouth Wash", 4, "Balding", [
+  new Substance("Mouth Wash", 4, "Balding", [
     ["Calming", "Anti-Gravity"],
     ["Calorie-Dense", "Sneaky"],
     ["Explosive", "Sedating"],
     ["Focused", "Jennerising"]
   ]),
-  "Paracetamol": new Substance("Paracetamol", 3, "Sneaky", [
+  new Substance("Paracetamol", 3, "Sneaky", [
     ["Energizing", "Paranoia"],
     ["Calming", "Slippery"],
     ["Toxic", "Tropic Thunder"],
@@ -167,10 +172,24 @@ export const substanceMap: Record<SubstanceName, Substance> = {
     ["Paranoia", "Balding"],
     ["Focused", "Gingeritis"]
   ]),
-  "Viagra": new Substance("Viagra", 4, "Tropic Thunder", [
+  new Substance("Viagra", 4, "Tropic Thunder", [
     ["Athletic", "Sneaky"],
     ["Euphoric", "Bright-Eyed"],
     ["Laxative", "Calming"],
     ["Disorienting", "Toxic"]
-  ]),
+  ])
+]
+
+const nameMap: Record<string, Substance> = {};
+const idMap: Record<string, Substance> = {};
+const completenessCheck: Set<string> = new Set(substanceTypes);
+for (const substance of substances) {
+  nameMap[substance.name] = substance;
+  idMap[substance.id] = substance;
+  completenessCheck.delete(substance.name);
 }
+if (completenessCheck.size) {
+  throw new Error("Undefined substances found! Missing: " + [...completenessCheck.values()].join(", "));
+}
+export const substanceMap: Record<SubstanceName, Substance> = nameMap;
+export const substanceIdMap: Record<SubstanceId, Substance> = idMap;

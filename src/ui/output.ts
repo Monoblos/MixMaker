@@ -1,4 +1,5 @@
 import type { Drug } from "../data/drug";
+import { effectMap } from "../data/effects";
 import type { SubstanceName } from "../data/substances";
 
 const output = <HTMLDivElement>document.getElementById("result");
@@ -6,22 +7,34 @@ const errorOut = <HTMLDivElement>document.getElementById("error");
 const drugValue = <HTMLSpanElement>document.getElementById("drugValue");
 const effects = <HTMLUListElement>document.getElementById("effects");
 const pathText = <HTMLParagraphElement>document.getElementById("pathText");
-const path = <HTMLUListElement>document.getElementById("path");
+const path = <HTMLOListElement>document.getElementById("path");
+const loader = <HTMLSpanElement>document.getElementById("loader");
 
 export function showError(text: string) {
   errorOut.innerText = text;
   errorOut.hidden = false;
   output.hidden = true;
+  loader.hidden = true;
+}
+
+export function setLoading() {
+  loader.hidden = false;
+  output.hidden = true;
+  errorOut.hidden = true;
+}
+export function stopLoading() {
+  loader.hidden = true;
 }
 
 export function showResult(drug: Drug, chain?: SubstanceName[]) {
   errorOut.hidden = true;
   output.hidden = false;
-  drugValue.innerText = drug.price + "";
+  loader.hidden = true;
+  drugValue.innerText = drug.price + " (total multiplier is " + (Math.floor(drug.mutliplier * 100) / 100) + " from theoretical max 5.68)";
   effects.innerHTML = "";
   for (const effect of drug.effectList) {
     const elem = document.createElement("li");
-    elem.innerText = effect.name;
+    elem.innerText = `${effect} (${effectMap[effect].multiplier})`;
     effects.appendChild(elem);
   }
 
@@ -43,4 +56,5 @@ export function showResult(drug: Drug, chain?: SubstanceName[]) {
 export function clear() {
   errorOut.hidden = true;
   output.hidden = true;
+  loader.hidden = true;
 }

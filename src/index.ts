@@ -1,11 +1,7 @@
-import { Drug, drugs } from "./data/drug";
-import { effectMap, type EffectName } from "./data/effects";
-import { substanceMap, type SubstanceName } from "./data/substances";
-import { GraphMapper } from "./drupmapper/graphmapper";
 import { initDrugDropdown, initIngredients, initTargetOptions } from "./ui/initinputs";
 import { initOptimizer } from "./ui/optimizer";
-import { clear, showError, showResult } from "./ui/output";
-import { findRecipe } from "./ui/recipe";
+import { clear } from "./ui/output";
+import { initRecipe } from "./ui/recipe";
 import { initSimulation } from "./ui/simulation";
 
 const tool = <HTMLSelectElement>document.getElementById("tool");
@@ -16,12 +12,11 @@ const tools = {
 }
 document.querySelector
 
-// Init dropdowns
+// Init Inputs
 initDrugDropdown();
 initTargetOptions();
 initIngredients();
 
-const mapper = new GraphMapper();
 
 // Tool selection
 tool.addEventListener("change", (e) => {
@@ -31,24 +26,7 @@ tool.addEventListener("change", (e) => {
   }
 });
 
-// Recipe
-const load = <HTMLButtonElement>document.querySelector("#recipe #load");
-const depth = <HTMLInputElement>document.querySelector("#recipe #depth");
-const linear = <HTMLInputElement>document.querySelector("#recipe #linear");
-const nodes = <HTMLSpanElement>document.querySelector("#recipe #nodes");
-load.addEventListener("click", () => {
-  mapper.init(depth.valueAsNumber, linear.checked);
-  nodes.innerText = mapper.nodeCount + "";
-  (<HTMLDivElement>document.querySelector("#recipe #withGraph")).hidden = false;
-});
-const calc = <HTMLButtonElement>document.querySelector("#recipe #calc");
-calc.addEventListener("click", () => {
-  findRecipe(mapper);
-});
-
-// Simulation
+// Interaction
+initRecipe();
 initSimulation();
-
 initOptimizer();
-
-(<any>window).mapper = mapper;

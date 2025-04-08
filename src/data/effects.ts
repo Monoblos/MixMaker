@@ -91,7 +91,7 @@ export const effectMap: Record<EffectName, Effect> = {
   "Shrinking": new Effect("Shrinking", 0.6),
   "Slippery": new Effect("Slippery", 0.34),
   "Smelly": new Effect("Smelly", 0),
-  "Sneaky": new Effect("Sneaky", 0.24),
+  "Sneaky": new Effect("Sneaky", 0.24, "Police takes longer to detect you"),
   "Spicy": new Effect("Spicy", 0.38, "Bright burning head"),
   "Thought-Provoking": new Effect("Thought-Provoking", 0.44),
   "Toxic": new Effect("Toxic", 0, "Puke"),

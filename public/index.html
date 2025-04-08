@@ -28,12 +28,12 @@
           <label for="base">Select base drug:</label>
           <select name="drug", id="base"></select>
         </div>
-        <input type="number" id="depth" value="5" width="5"/>
+        <input type="number" id="depth" value="4"/>
         <input type="checkbox" id="linear"/>
         <button id="load">Load</button>
       </div>
       <div id="withGraph" hidden>
-        <div id="loadResult">Loaded graph of <span id="nodes">0</span> nodes.</div>
+        <div id="loadResult">Loaded recipes for <span id="nodes">0</span> effect combinations.</div>
         <div id="selection">
         </div>
         <div>
@@ -59,10 +59,10 @@
       <div>
         <label for="base">Select base drug:</label>
         <select name="drug", id="base"></select>
-        <span><input type="checkbox" id="perStep"/><label for="perStep">Optimizie for per-step profit</label></span>
       </div>
       <div style="padding: 5px;">
-        <input type="number" id="steps" value="3" width="5"/>
+        <input type="number" id="steps" value="4" width="5"/>
+        <span><input type="checkbox" id="perStep"/><label for="perStep">Optimizie for per-step profit</label></span>
         <button id="find">Find</button>
       </div>
     </div>

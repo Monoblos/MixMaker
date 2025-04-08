@@ -50,7 +50,17 @@ export class Drug {
   }
 }
 
-export const drugs: Record<string, ()=>Drug> = {
+export const drugNames = [
+  "OG Kush",
+  "Sour Diesel",
+  "Green Crack",
+  "Granddady Purple",
+  "Meth",
+  "Cocain"
+] as const;
+export type DrugName = typeof drugNames[number];
+
+export const drugs: Record<DrugName, ()=>Drug> = {
   "OG Kush": () => new Drug(35, ["Calming"]),
   "Sour Diesel": () => new Drug(35, ["Refreshing"]),
   "Green Crack": () => new Drug(35, ["Energizing"]),

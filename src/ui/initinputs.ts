@@ -27,8 +27,14 @@ export function initTargetOptions() {
     const label = document.createElement("label");
     label.htmlFor = id;
     label.innerText = effect.name;
+    if (effect.multiplier === 0) {
+      label.style.color = "red";
+    }
+    if (effect.multiplier > 0.44) {
+      label.style.color = "green";
+    }
     const span = document.createElement("span");
-    span.title = effect.consumedEffect || "";
+    span.title = `Bonus: ${effect.multiplier}${effect.consumedEffect ? "\n" + effect.consumedEffect : ""}`;
     span.appendChild(input);
     span.appendChild(label);
     searchOptions.appendChild(span);

@@ -3,6 +3,7 @@ import { initOptimizer } from "./ui/optimizer";
 import { clear } from "./ui/output";
 import { initRecipe } from "./ui/recipe";
 import { initSimulation } from "./ui/simulation";
+import { Tool, urlParser } from "./ui/urlparser";
 
 const tool = <HTMLSelectElement>document.getElementById("tool");
 const tools = {
@@ -17,16 +18,22 @@ initDrugDropdown();
 initTargetOptions();
 initIngredients();
 
-
 // Tool selection
-tool.addEventListener("change", (e) => {
+function onToolChange() {
   clear();
   for (const [key, value] of Object.entries(tools)) {
     value.hidden = key !== tool.value;
   }
-});
+  urlParser.setTool(tool.value as Tool);
+}
+tool.addEventListener("change", onToolChange);
 
 // Interaction
 initRecipe();
 initSimulation();
 initOptimizer();
+
+if (urlParser.tool) {
+  tool.value = urlParser.tool;
+  onToolChange();
+}

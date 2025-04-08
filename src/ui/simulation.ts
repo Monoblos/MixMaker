@@ -1,6 +1,7 @@
-import { drugs } from "../data/drug";
+import { DrugName, drugs } from "../data/drug";
 import { substanceMap, SubstanceName } from "../data/substances";
 import { showResult } from "./output";
+import { urlParser } from "./urlparser";
 
 const dragState = {
   text: "",
@@ -35,6 +36,16 @@ export function initSimulation() {
   drugDropdown.addEventListener("change", () => {
     recalcSimulation();
   });
+
+  const config = urlParser.simulator;
+  if (config) {
+    console.log("Found simulator config:", config);
+    drugDropdown.value = config.drug;
+    for (const sub of config.recipe) {
+      addElement(sub);
+    }
+    setTimeout(recalcSimulation);
+  }
 }
 
 function dragStartHandler(ev: DragEvent) {
@@ -79,11 +90,8 @@ function updateIndicator() {
   styleSheet.insertRule("#selectedSteps::before " + cssText);
 }
 
-function dropHandler(ev: DragEvent) {
+function addElement(text: string, insertAt?: number) {
   const dropArea = <HTMLDivElement>document.querySelector("#simulator #selectedSteps");
-  ev.preventDefault();
-
-  const text = dragState.text;
 
   const textContent = document.createElement("span");
   textContent.innerText = text;
@@ -94,7 +102,7 @@ function dropHandler(ev: DragEvent) {
   xMark.classList.add("xmark");
   xMark.addEventListener("click", function() {
     this.parentElement?.parentElement?.removeChild(this.parentElement);
-    recalcSimulation();
+    recalcSimulation(true);
   });
 
   const toAdd = document.createElement("p");
@@ -118,22 +126,35 @@ function dropHandler(ev: DragEvent) {
     recalcSimulation();
   });
 
+  const children = [...dropArea.children];
+  dropArea.innerHTML = "";
+  if (insertAt) {
+    children.splice(insertAt, 0, toAdd);
+  } else {
+    children.push(toAdd);
+  }
+  for (const child of children) {
+    dropArea.appendChild(child);
+  }
+}
+
+function dropHandler(ev: DragEvent) {
+  const dropArea = <HTMLDivElement>document.querySelector("#simulator #selectedSteps");
+  ev.preventDefault();
+
+  const text = dragState.text;
+
   const dropIndex = dragState.index;
   const after = dragState.after;
   const insertAt = dropIndex + (after ? 1 : 0);
 
-  const children = [...dropArea.children];
-  dropArea.innerHTML = "";
-  children.splice(insertAt, 0, toAdd);
-  for (const child of children) {
-    dropArea.appendChild(child);
-  }
-  recalcSimulation();
+  addElement(text, insertAt);
+  recalcSimulation(true);
 }
 
-function recalcSimulation() {
+function recalcSimulation(setUrl = false) {
   const drugDropdown = <HTMLSelectElement>document.querySelector("#simulator #base");
-  const drug = drugs[drugDropdown.value];
+  const drug = drugs[drugDropdown.value as DrugName];
   if (!drug) throw new Error("Invalid drug input selected");
 
   let realDrug = drug();
@@ -143,6 +164,13 @@ function recalcSimulation() {
     if (index > preview.index) return;
     realDrug.apply(substanceMap[element.innerText as SubstanceName]);
   });
+
+  if (setUrl) {
+    urlParser.setSimulator({
+      drug: drugDropdown.value as DrugName,
+      recipe: [...selectedSteps].map((element) => element.innerText as SubstanceName)
+    })
+  }
 
   showResult(realDrug);
 }

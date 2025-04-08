@@ -19,8 +19,17 @@ export const substanceTypes = [
   "Viagra"] as const;
 export type SubstanceName = typeof substanceTypes[number];
 
-const substanceIds = substanceTypes.map((st) => st.substring(0, 3));
+const idLength = 3;
+export const substanceIds = substanceTypes.map((st) => st.substring(0, idLength));
 export type SubstanceId = typeof substanceIds[number];
+
+export function getSubstanceList(substanceIdList: string): SubstanceName[] {
+  const result: SubstanceName[] = [];
+  for (let i = 0; i < substanceIdList.length; i += idLength) {
+    result.push(substanceIdMap[substanceIdList.substring(i, i + idLength)].name);
+  }
+  return result;
+}
 
 export class Substance {
   public id: SubstanceId;

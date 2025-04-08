@@ -17,7 +17,7 @@ body > :first-child, #withGraph > *, #simulator > *, #optimizer > * {
   gap: 5px;
 }
 
-#depth {
+input[type="number"] {
   width: calc(2ch + 20px);
 }
 

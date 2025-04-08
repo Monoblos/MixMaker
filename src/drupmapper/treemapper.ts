@@ -15,7 +15,6 @@ export class TreeMapper {
     children: { } as Record<EffectName, undefined>
   }
   private knownCombinations: Set<string> = new Set();
-  private nodeCounter = 0;
 
   public mostExpensive = {
     id: "[]",
@@ -29,7 +28,7 @@ export class TreeMapper {
   public constructor() { }
 
   public get nodeCount() {
-    return this.nodeCounter;
+    return this.knownCombinations.size;
   }
 
   private addNode(effectList: EffectName[], substances: SubstanceName[]): EffectTreeNode | null {
@@ -100,7 +99,6 @@ export class TreeMapper {
       id: "[]",
       price: 0
     };
-    this.nodeCounter = 0;
 
     startDrug = startDrug || new Drug(0, []);
     this.addLayer([], maxDepth, startDrug);

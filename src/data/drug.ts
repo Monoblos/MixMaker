@@ -14,9 +14,9 @@ export class Drug {
       const rep = substance.effectReplacements.findIndex(([erk]) => erk === this.effectList[i]);
       const replacement = substance.effectReplacements[rep]?.[1];
       if (!replacement) continue;
-      // Remove if duplicate
+      // Skip if result is duplicate
       if (this.effectList.some((en) => en === replacement)) {
-        this.effectList.splice(i, 1);
+        // this.effectList.splice(i, 1);
         continue;
       }
       // Replace if found

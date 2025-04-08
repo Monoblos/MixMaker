@@ -1,11 +1,10 @@
 import { Drug, DrugName, drugs } from "../data/drug";
 import { substanceMap } from "../data/substances";
-import { GraphMapper } from "../drupmapper/graphmapper";
-import { TreeMapper } from "../drupmapper/treemapper";
+import { EfficientTreeMapper } from "../drupmapper/efficienttreemapper";
 import { setLoading, showResult } from "./output";
 import { urlParser } from "./urlparser";
 
-const mapper = new TreeMapper();
+const mapper = new EfficientTreeMapper(true);
 
 export function initOptimizer() {
   const find = <HTMLButtonElement>document.querySelector("#optimizer #find");

@@ -1,19 +1,14 @@
 import { DrugName, drugs } from "../data/drug";
 import { EffectName, effectNames } from "../data/effects";
 import { substanceMap, SubstanceName } from "../data/substances";
-import { GraphMapper } from "../drupmapper/graphmapper";
+import { EfficientTreeMapper } from "../drupmapper/efficienttreemapper";
 import { Mapper } from "../drupmapper/mapper";
-import { TreeMapper } from "../drupmapper/treemapper";
 import { setLoading, showError, showResult, stopLoading } from "./output";
 import { urlParser } from "./urlparser";
 
-const graph = new GraphMapper();
-const tree = new TreeMapper();
+const mapper = new EfficientTreeMapper();
 
-const mapper = tree;
-
-(<any>window).graph = graph;
-(<any>window).tree = tree;
+(<any>window).mapper = mapper;
 
 function getSelectedEffects() {
   const targetSelection = <NodeListOf<HTMLInputElement>>document.getElementsByName("effect");
@@ -45,7 +40,9 @@ export function initRecipe() {
     setLoading();
     setTimeout(() => {
       const drug = drugs[drugDropdown.value as DrugName];
+      const time = Date.now();
       mapper.init(depth.valueAsNumber, linear.checked, drug());
+      console.log(`Solver took ${Date.now() - time}ms to init for ${depth.valueAsNumber} layers and found ${mapper.nodeCount} nodes.`);
       nodes.innerText = mapper.nodeCount + "";
       configArea.hidden = false;
       load.disabled = false;

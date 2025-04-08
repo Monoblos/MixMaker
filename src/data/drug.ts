@@ -1,5 +1,5 @@
 import { Effect, effectMap, type EffectName } from "../data/effects";
-import { Substance } from "./substances";
+import { Substance, substanceMap, SubstanceName } from "./substances";
 
 export class Drug {
   public effectList: EffectName[]
@@ -7,7 +7,10 @@ export class Drug {
     this.effectList = effectList.slice()
   };
 
-  public apply(substance: Substance) {
+  public apply(substance: Substance | SubstanceName) {
+    if (typeof substance === "string") {
+      substance = substanceMap[substance];
+    }
     // Go through all current effects to check what needs replacement
     for (let i = 0; i < this.effectList.length; i++) {
       // Find if effect is mention in replacement list of substance
@@ -30,7 +33,7 @@ export class Drug {
     this.effectList.sort((a, b) => a.localeCompare(b));
   }
 
-  public applyToCopy(substance: Substance) {
+  public applyToCopy(substance: Substance | SubstanceName) {
     const copy = new Drug(this.baseprice, this.effectList);
     copy.apply(substance);
     return copy;

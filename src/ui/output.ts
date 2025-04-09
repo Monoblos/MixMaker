@@ -1,6 +1,6 @@
 import type { Drug } from "../data/drug";
 import { effectMap } from "../data/effects";
-import type { SubstanceName } from "../data/substances";
+import { substanceMap, type SubstanceName } from "../data/substances";
 
 const output = <HTMLDivElement>document.getElementById("result");
 const errorOut = <HTMLDivElement>document.getElementById("error");
@@ -9,6 +9,7 @@ const effects = <HTMLUListElement>document.getElementById("effects");
 const pathText = <HTMLParagraphElement>document.getElementById("pathText");
 const path = <HTMLOListElement>document.getElementById("path");
 const loader = <HTMLSpanElement>document.getElementById("loader");
+const toSimulation = <HTMLAnchorElement>document.querySelector("a");
 
 export function showError(text: string) {
   errorOut.innerText = text;
@@ -47,9 +48,12 @@ export function showResult(drug: Drug, chain?: SubstanceName[]) {
       elem.innerText = chainLink;
       path.appendChild(elem);
     }
+    toSimulation.hidden = false;
+    toSimulation.href = `/#simulator${drug.name?.replaceAll(" ", "%20")}${chain.map((sub) => substanceMap[sub].id).join("")}`;
   } else {
     pathText.hidden = true;
     path.hidden = true;
+    toSimulation.hidden = true;
   }
 }
 

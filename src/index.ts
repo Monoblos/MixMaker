@@ -28,6 +28,9 @@ function onToolChange() {
 }
 tool.addEventListener("change", onToolChange);
 
+const toSimulation = <HTMLAnchorElement>document.querySelector("a");
+toSimulation.addEventListener("click", () => setTimeout(() => location.reload()));
+
 // Interaction
 initRecipe();
 initSimulation();

@@ -3,7 +3,7 @@ import { Substance, substanceMap, SubstanceName } from "./substances";
 
 export class Drug {
   public effectList: EffectName[]
-  public constructor(public baseprice: number, effectList: EffectName[]) {
+  public constructor(public baseprice: number, effectList: EffectName[], public name?: string) {
     this.effectList = effectList.slice()
   };
 
@@ -64,10 +64,10 @@ export const drugNames = [
 export type DrugName = typeof drugNames[number];
 
 export const drugs: Record<DrugName, ()=>Drug> = {
-  "OG Kush": () => new Drug(35, ["Calming"]),
-  "Sour Diesel": () => new Drug(35, ["Refreshing"]),
-  "Green Crack": () => new Drug(35, ["Energizing"]),
-  "Granddady Purple": () => new Drug(35, ["Sedating"]),
-  "Meth": () => new Drug(70, []),
-  "Cocain": () => new Drug(150, []),
+  "OG Kush": () => new Drug(35, ["Calming"], drugNames[0]),
+  "Sour Diesel": () => new Drug(35, ["Refreshing"], drugNames[1]),
+  "Green Crack": () => new Drug(35, ["Energizing"], drugNames[2]),
+  "Granddady Purple": () => new Drug(35, ["Sedating"], drugNames[3]),
+  "Meth": () => new Drug(70, [], drugNames[4]),
+  "Cocain": () => new Drug(150, [], drugNames[5]),
 }

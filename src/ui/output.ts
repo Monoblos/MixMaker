@@ -49,7 +49,7 @@ export function showResult(drug: Drug, chain?: SubstanceName[]) {
       path.appendChild(elem);
     }
     toSimulation.hidden = false;
-    toSimulation.href = `/#simulator${drug.name?.replaceAll(" ", "%20")}${chain.map((sub) => substanceMap[sub].id).join("")}`;
+    toSimulation.href = `#simulator${drug.name?.replaceAll(" ", "%20")}${chain.map((sub) => substanceMap[sub].id).join("")}`;
   } else {
     pathText.hidden = true;
     path.hidden = true;

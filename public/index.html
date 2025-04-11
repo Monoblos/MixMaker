@@ -29,7 +29,7 @@
           <select name="drug", id="base"></select>
         </div>
         <input type="number" id="depth" value="4"/>
-        <input type="checkbox" id="linear"/>
+        <input type="checkbox" id="linear" hidden/>
         <button id="load">Load</button>
       </div>
       <div id="withGraph" hidden>
@@ -73,7 +73,8 @@
     </div>
     <div id="error" hidden></div>
     <div id="result" hidden>
-      <p>Found drug worth: <span id="drugValue">$</span></p>
+      <p>Found drug worth: <span id="drugValue">$</span> (total multiplier is <span id="drugMultiplier">$</span> from theoretical max 5.68)</p>
+      <p>Profit after ingredient cost is <span id="profit"></span> which means <span id="perStepProfit"></span> profit per step.</p>
       <p>Drug hast the effects:</p>
       <ul id="effects"></ul>
       <p id="pathText">Combination to reach it</p>

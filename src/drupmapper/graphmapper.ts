@@ -1,7 +1,7 @@
 import Graph from "node-dijkstra";
 import { substanceMap, type SubstanceName } from "../data/substances";
 import { Drug, drugs } from "../data/drug";
-import type { EffectName } from "../data/effects";
+import { getEffectList, type EffectName } from "../data/effects";
 
 type Layer = Set<string>;
 
@@ -91,7 +91,7 @@ export class GraphMapper {
         this.nodes.add(key);
 
         // Keys are a list of effects
-        const baseEffects = JSON.parse(key) as EffectName[];
+        const baseEffects = getEffectList(key);
         // Check result for each substance we can apply
         for (const substance of Object.values(substanceMap)) {
           // Create resulting drug and "save" it to the layer

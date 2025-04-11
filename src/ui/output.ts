@@ -1,10 +1,13 @@
 import type { Drug } from "../data/drug";
 import { effectMap } from "../data/effects";
-import { substanceMap, type SubstanceName } from "../data/substances";
+import { getListPrice, substanceMap, type SubstanceName } from "../data/substances";
 
 const output = <HTMLDivElement>document.getElementById("result");
 const errorOut = <HTMLDivElement>document.getElementById("error");
 const drugValue = <HTMLSpanElement>document.getElementById("drugValue");
+const drugMultiplier = <HTMLSpanElement>document.getElementById("drugMultiplier");
+const profit = <HTMLSpanElement>document.getElementById("profit");
+const perStepProfit = <HTMLSpanElement>document.getElementById("perStepProfit");
 const effects = <HTMLUListElement>document.getElementById("effects");
 const pathText = <HTMLParagraphElement>document.getElementById("pathText");
 const path = <HTMLOListElement>document.getElementById("path");
@@ -27,11 +30,14 @@ export function stopLoading() {
   loader.hidden = true;
 }
 
-export function showResult(drug: Drug, chain?: SubstanceName[]) {
+export function showResult(drug: Drug, chain: SubstanceName[], showIngredients = true) {
   errorOut.hidden = true;
   output.hidden = false;
   loader.hidden = true;
-  drugValue.innerText = drug.price + " (total multiplier is " + (Math.floor(drug.mutliplier * 100) / 100) + " from theoretical max 5.68)";
+  drugValue.innerText = drug.price + "";
+  drugMultiplier.innerText = (Math.floor(drug.mutliplier * 100) / 100) + "";
+  profit.innerText = (drug.price - drug.baseprice - getListPrice(chain)) + "";
+  perStepProfit.innerText = (Math.floor((drug.price - drug.baseprice - getListPrice(chain)) / (chain.length) * 100) / 100) + "";
   effects.innerHTML = "";
   for (const effect of drug.effectList) {
     const elem = document.createElement("li");
@@ -39,7 +45,7 @@ export function showResult(drug: Drug, chain?: SubstanceName[]) {
     effects.appendChild(elem);
   }
 
-  if (chain) {
+  if (showIngredients) {
     pathText.hidden = false;
     path.hidden = false;
     path.innerHTML = "";

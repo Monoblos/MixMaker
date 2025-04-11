@@ -30,6 +30,12 @@ export function getSubstanceList(substanceIdList: string): SubstanceName[] {
   }
   return result;
 }
+export function getListPrice(substances: string | SubstanceName[]): number {
+  if (typeof substances === "string") {
+    substances = getSubstanceList(substances);
+  }
+  return substances.reduce((s, c) => s + substanceMap[c].price, 0);
+}
 
 export class Substance {
   public id: SubstanceId;
@@ -49,20 +55,19 @@ const substances = [
   new Substance("Banana", 2, "Gingeritis", [
     ["Energizing", "Thought-Provoking"],
     ["Calming", "Sneaky"],
+    ["Smelly", "Anti-Gravity"],
     ["Toxic", "Smelly"],
     ["Long Faced", "Refreshing"],
     ["Cyclopean", "Thought-Provoking"],
-    ["Disorienting", "Focused"],
     ["Focused", "Seizure-Inducing"],
+    ["Disorienting", "Focused"],
     ["Paranoia", "Jennerising"],
-    ["Smelly", "Anti-Gravity"]
   ]),
   new Substance("Battery", 8, "Bright-Eyed", [
     ["Munchies", "Tropic Thunder"],
     ["Euphoric", "Zombifying"],
     ["Electrifying", "Euphoric"],
     ["Laxative", "Calorie-Dense"],
-    ["Electrifying", "Euphoric"],
     ["Cyclopean", "Glowing"],
     ["Shrinking", "Munchies"]
   ]),
@@ -75,13 +80,13 @@ const substances = [
     ["Shrinking", "Refreshing"]
   ]),
   new Substance("Cuke", 2, "Energizing", [
+    ["Euphoric", "Laxative"],
     ["Toxic", "Euphoric"],
+    ["Munchies", "Athletic"],
     ["Slippery", "Munchies"],
     ["Sneaky", "Paranoia"],
     ["Foggy", "Cyclopean"],
     ["Gingeritis", "Thought-Provoking"],
-    ["Munchies", "Athletic"],
-    ["Euphoric", "Laxative"]
   ]),
   new Substance("Donut", 3, "Calorie-Dense", [
     ["Calorie-Dense", "Explosive"],
@@ -96,32 +101,31 @@ const substances = [
     ["Euphoric", "Energizing"],
     ["Spicy", "Euphoric"],
     ["Tropic Thunder", "Sneaky"],
+    ["Disorienting", "Electrifying"],
     ["Glowing", "Disorienting"],
     ["Foggy", "Laxative"],
-    ["Glowing", "Disorienting"],
-    ["Disorienting", "Electrifying"],
     ["Schizophrenia", "Balding"],
     ["Focused", "Shrinking"]
   ]),
   new Substance("Flu Medicine", 5, "Sedating", [
     ["Calming", "Bright-Eyed"],
+    ["Munchies", "Slippery"],
     ["Athletic", "Munchies"],
     ["Thought-Provoking", "Gingeritis"],
     ["Cyclopean", "Foggy"],
-    ["Munchies", "Slippery"],
-    ["Laxative", "Euphoric"],
     ["Euphoric", "Toxic"],
+    ["Laxative", "Euphoric"],
     ["Focused", "Calming"],
     ["Electrifying", "Refreshing"],
     ["Shrinking", "Paranoia"]
   ]),
   new Substance("Gasoline", 5, "Toxic", [
     ["Gingeritis", "Smelly"],
-    ["Jennerising", "Sneaky"],
     ["Sneaky", "Tropic Thunder"],
+    ["Jennerising", "Sneaky"],
     ["Munchies", "Sedating"],
-    ["Energizing", "Euphoric"],
     ["Euphoric", "Energizing"],
+    ["Energizing", "Euphoric"],
     ["Laxative", "Foggy"],
     ["Disorienting", "Glowing"],
     ["Paranoia", "Calming"],
@@ -149,18 +153,18 @@ const substances = [
     ["Athletic", "Laxative"],
     ["Slippery", "Toxic"],
     ["Thought-Provoking", "Energizing"],
-    ["Seizure-Inducing", "Focused"],
     ["Focused", "Disorienting"],
+    ["Seizure-Inducing", "Focused"],
     ["Sneaky", "Glowing"],
     ["Thought-Provoking", "Cyclopean"],
     ["Shrinking", "Electrifying"]
   ]),
   new Substance("Motor Oil", 6, "Slippery", [
+    ["Munchies", "Schizophrenia"],
     ["Energizing", "Munchies"],
     ["Foggy", "Toxic"],
     ["Euphoric", "Sedating"],
     ["Paranoia", "Anti-Gravity"],
-    ["Munchies", "Schizophrenia"]
   ]),
   new Substance("Mouth Wash", 4, "Balding", [
     ["Calming", "Anti-Gravity"],
@@ -169,7 +173,6 @@ const substances = [
     ["Focused", "Jennerising"]
   ]),
   new Substance("Paracetamol", 3, "Sneaky", [
-    ["Energizing", "Paranoia"],
     ["Calming", "Slippery"],
     ["Toxic", "Tropic Thunder"],
     ["Spicy", "Bright-Eyed"],
@@ -178,7 +181,7 @@ const substances = [
     ["Munchies", "Anti-Gravity"],
     ["Paranoia", "Balding"],
     ["Electrifying", "Athletic"],
-    ["Paranoia", "Balding"],
+    ["Energizing", "Paranoia"],
     ["Focused", "Gingeritis"]
   ]),
   new Substance("Viagra", 4, "Tropic Thunder", [

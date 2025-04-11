@@ -160,9 +160,10 @@ function recalcSimulation(setUrl = false) {
   let realDrug = drug();
 
   const selectedSteps = <NodeListOf<HTMLSpanElement>>document.querySelectorAll("#simulator #selectedSteps > p > :first-child");
-  selectedSteps.forEach((element, index) => {
+  const ingredients = [...selectedSteps].map((s) => s.innerText as SubstanceName);
+  ingredients.forEach((element, index) => {
     if (index > preview.index) return;
-    realDrug.apply(substanceMap[element.innerText as SubstanceName]);
+    realDrug.apply(substanceMap[element]);
   });
 
   if (setUrl) {
@@ -172,5 +173,5 @@ function recalcSimulation(setUrl = false) {
     })
   }
 
-  showResult(realDrug);
+  showResult(realDrug, ingredients, false);
 }

@@ -1,6 +1,6 @@
 import { Drug } from "../data/drug";
 import { EffectName, getEffectId, getEffectList, minimizeEffectList } from "../data/effects";
-import { substanceMap, SubstanceName, substanceTypes } from "../data/substances";
+import { getListPrice, substanceMap, SubstanceName, substanceTypes } from "../data/substances";
 import Queue from 'yocto-queue';
 
 type SubstanceTreeNode = {
@@ -53,7 +53,10 @@ export class EfficientTreeMapper {
   private addNode(effectList: EffectName[], substances: SubstanceName[], node: SubstanceTreeNode): SubstanceTreeNode | null {
     const nodeId = minimizeEffectList(effectList);
     const existingNode = this.knownCombinations.get(nodeId);
-    if (existingNode && getNodeDepth(existingNode) <= substances.length) {
+    if (existingNode && (
+      getNodeDepth(existingNode) <= substances.length ||
+      getListPrice(getSubstanceList(existingNode)) < getListPrice(substances))
+    ) {
       // We already know a better combination to get this effect, nothing to do
       return null;
     }
@@ -75,12 +78,12 @@ export class EfficientTreeMapper {
   private updateMaxPrice(drug: Drug, substances: SubstanceName[]) {
     if (!this.optimize) return;
     const id = drug.id;
-    const price = drug.price;
+    const price = drug.price - getListPrice(substances);
     if (this.mostExpensive.price < price) {
       this.mostExpensive.price = price;
       this.mostExpensive.id = id;
     }
-    const perStep = (price - drug.baseprice) / (substances.length + 1);
+    const perStep = (price - drug.baseprice) / (substances.length);
     if (this.mostExpensivePerStep.price < perStep) {
       this.mostExpensivePerStep.price = perStep;
       this.mostExpensivePerStep.id = id;

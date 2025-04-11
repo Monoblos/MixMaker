@@ -1,4 +1,5 @@
 import { Drug, DrugName, drugs } from "../data/drug";
+import { getEffectList } from "../data/effects";
 import { substanceMap } from "../data/substances";
 import { EfficientTreeMapper } from "../drupmapper/efficienttreemapper";
 import { setLoading, showResult } from "./output";
@@ -41,7 +42,7 @@ function findBest(drug: () => Drug, steps: number, perStep: boolean) {
 
   const best = perStep ? mapper.mostExpensivePerStep : mapper.mostExpensive;
   console.log(`Best option is ${best.id} with a price of ${best.price}`);
-  const result = mapper.findRecipe(drug(), JSON.parse(best.id));
+  const result = mapper.findRecipe(drug(), getEffectList(best.id));
 
   const resultDrug = drug();
   for (const sub of result) {

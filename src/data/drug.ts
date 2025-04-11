@@ -1,4 +1,4 @@
-import { Effect, effectMap, type EffectName } from "../data/effects";
+import { Effect, effectMap, minimizeEffectList, type EffectName } from "../data/effects";
 import { Substance, substanceMap, SubstanceName } from "./substances";
 
 export class Drug {
@@ -11,19 +11,19 @@ export class Drug {
     if (typeof substance === "string") {
       substance = substanceMap[substance];
     }
-    // Go through all current effects to check what needs replacement
-    for (let i = 0; i < this.effectList.length; i++) {
-      // Find if effect is mention in replacement list of substance
-      const rep = substance.effectReplacements.findIndex(([erk]) => erk === this.effectList[i]);
-      const replacement = substance.effectReplacements[rep]?.[1];
-      if (!replacement) continue;
-      // Skip if result is duplicate
-      if (this.effectList.some((en) => en === replacement)) {
-        // this.effectList.splice(i, 1);
-        continue;
+
+    // Go through ordered replacement list. Effects can't chain "A"->"B"->"C"
+    // but can skip "A"->"C" if "B" is present like "B"->"C", "A"->"B" at once.
+    for (const [toReplace, replacement] of substance.effectReplacements) {
+      const rep = this.effectList.findIndex((eff) => eff === toReplace);
+      if (rep !== -1) {
+        if (this.effectList.some((eff) => eff === replacement)) {
+          this.effectList.splice(rep, 1);
+        } else {
+          // Replace if found and replacement not present
+          this.effectList[rep] = replacement;
+        }
       }
-      // Replace if found
-      this.effectList[i] = effectMap[replacement].name;
     }
     // Add base effect if not already existing
     if (this.effectList.length < 8 && !this.effectList.some((en) => en === substance.baseEffect)) {
@@ -49,7 +49,7 @@ export class Drug {
   }
 
   public get id() {
-    return JSON.stringify(this.effectList);
+    return minimizeEffectList(this.effectList);
   }
 }
 

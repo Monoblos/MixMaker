@@ -1,6 +1,6 @@
 import { Drug, DrugName, drugNames } from "../data/drug";
 import { EffectName, effectNames } from "../data/effects";
-import { getSubstanceList, SubstanceId, substanceIds, substanceMap, SubstanceName } from "../data/substances";
+import { getSubstanceList, substanceIds, substanceMap, SubstanceName } from "../data/substances";
 
 export const tools = [
   "recipe",

@@ -1,5 +1,5 @@
-import { Effect, effectMap, minimizeEffectList, type EffectName } from "../data/effects";
-import { Substance, substanceMap, SubstanceName } from "./substances";
+import { effectMap, minimizeEffectList, type EffectName } from "../data/effects";
+import { type Substance, substanceMap, type SubstanceName } from "./substances";
 
 export class Drug {
   public effectList: EffectName[]

@@ -28,9 +28,11 @@
           <label for="base">Select base drug:</label>
           <select name="drug", id="base"></select>
         </div>
-        <input type="number" id="depth" value="4"/>
+        <input type="number" id="depth" value="4" title="The maximum amount of substances used on the drug"/>
         <input type="checkbox" id="linear" hidden/>
-        <button id="load">Load</button>
+        <button id="generate">Generate</button>
+        <button id="load" title="Load a recipe book of depth 8 from the server instead of generating">Load</button>
+        <button id="save" title="Save to a local cache" hidden>Save</button>
       </div>
       <div id="withGraph" hidden>
         <div id="loadResult">Loaded recipes for <span id="nodes">0</span> effect combinations.</div>

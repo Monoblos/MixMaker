@@ -1,14 +1,21 @@
 import { DrugName, drugs } from "../data/drug";
 import { EffectName, effectNames } from "../data/effects";
 import { substanceMap, SubstanceName } from "../data/substances";
-import { EfficientTreeMapper } from "../drupmapper/efficienttreemapper";
+import { EfficientMapper } from "../drupmapper/efficientmapper";
 import { Mapper } from "../drupmapper/mapper";
 import { setLoading, showError, showResult, stopLoading } from "./output";
 import { urlParser } from "./urlparser";
 
-const mapper = new EfficientTreeMapper();
+const mapper = new EfficientMapper();
 
 (<any>window).mapper = mapper;
+
+const STORED_MAP_NAME = "mapType"
+
+type StoredConfig = {
+  drugName: string;
+  depth: number;
+}
 
 function getSelectedEffects() {
   const targetSelection = <NodeListOf<HTMLInputElement>>document.getElementsByName("effect");
@@ -22,15 +29,17 @@ function getSelectedEffects() {
 }
 
 export function initRecipe() {
+  const generate = <HTMLButtonElement>document.querySelector("#recipe #generate");
   const load = <HTMLButtonElement>document.querySelector("#recipe #load");
+  const save = <HTMLButtonElement>document.querySelector("#recipe #save");
   const depth = <HTMLInputElement>document.querySelector("#recipe #depth");
   const linear = <HTMLInputElement>document.querySelector("#recipe #linear");
   const nodes = <HTMLSpanElement>document.querySelector("#recipe #nodes");
   const drugDropdown = <HTMLSelectElement>document.querySelector("#recipe #base");
   const configArea = <HTMLDivElement>document.querySelector("#recipe #withGraph");
-  load.addEventListener("click", () => {
+  generate.addEventListener("click", () => {
     configArea.hidden = true;
-    load.disabled = true;
+    generate.disabled = true;
     urlParser.setRecipe({
       drug: drugDropdown.value as DrugName,
       depth: depth.valueAsNumber,
@@ -45,7 +54,7 @@ export function initRecipe() {
       console.log(`Solver took ${Date.now() - time}ms to init for ${depth.valueAsNumber} layers and found ${mapper.nodeCount} nodes.`);
       nodes.innerText = mapper.nodeCount + "";
       configArea.hidden = false;
-      load.disabled = false;
+      generate.disabled = false;
       stopLoading();
     });
   });
@@ -58,6 +67,25 @@ export function initRecipe() {
   });
   depth.addEventListener("change", () => {
     configArea.hidden = true;
+  });
+  save.addEventListener("click", () => {
+    const time = Date.now();
+    mapper.saveToStorage();
+    console.log(`Took ${Date.now() - time}ms to save ${mapper.nodeCount} nodes.`);
+  });
+
+  load.addEventListener("click", () => {
+    load.disabled = true;
+    setLoading();
+    setTimeout( async () => {
+      const time = Date.now();
+      await mapper.loadFromAdress(drugDropdown.value as DrugName);
+      console.log(`Took ${Date.now() - time}ms to load ${mapper.nodeCount} nodes.`);
+      nodes.innerText = mapper.nodeCount + "";
+      configArea.hidden = false;
+      load.disabled = false;
+      stopLoading();
+    });
   });
 
   const config = urlParser.recipe;

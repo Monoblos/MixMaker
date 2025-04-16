@@ -1,6 +1,6 @@
 import { DrugName, drugs } from "../data/drug";
 import { substanceMap, SubstanceName } from "../data/substances";
-import { showResult } from "./output";
+import { showError, showResult } from "./output";
 import { urlParser } from "./urlparser";
 
 const dragState = {
@@ -155,7 +155,9 @@ function dropHandler(ev: DragEvent) {
 function recalcSimulation(setUrl = false) {
   const drugDropdown = <HTMLSelectElement>document.querySelector("#simulator #base");
   const drug = drugs[drugDropdown.value as DrugName];
-  if (!drug) throw new Error("Invalid drug input selected");
+  if (!drug) {
+    return showError("Invalid drug input selected");
+  }
 
   let realDrug = drug();
 

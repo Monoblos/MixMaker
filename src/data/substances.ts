@@ -1,4 +1,4 @@
-import type { EffectName } from "./effects";
+import { type EffectName } from "./effects";
 
 export const substanceTypes = [
   "Addy",

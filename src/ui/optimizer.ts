@@ -1,6 +1,6 @@
 import { Drug, DrugName, drugs } from "../data/drug";
 import { getEffectList } from "../data/effects";
-import { substanceMap, SubstanceName } from "../data/substances";
+import { substanceMap, SubstanceName, substanceTypes } from "../data/substances";
 import { EfficientMapper } from "../drupmapper/efficientmapper";
 import { setLoading, showResult } from "./output";
 import { urlParser } from "./urlparser";
@@ -23,25 +23,31 @@ export function initOptimizer() {
     const drug = drugs[drugDropdown.value as DrugName];
     if (!drug) throw new Error("Invalid drug input selected");
 
-    urlParser.setOptimizer({
-      drug: drugDropdown.value as DrugName,
-      depth: steps.valueAsNumber,
-      perStep: serachType.checked,
-    });
-
     let substances: SubstanceName[] = [];
 
-    if (rankSelection.value === "-1") {
+    const selectedRank = Number.parseInt(rankSelection.value);
+    if (selectedRank === -1) {
       const substanceElements = <NodeListOf<HTMLInputElement>>document.getElementsByName("substance");
       substances = [...substanceElements.values()].filter((c) => c.checked).map((c) => c.value) as SubstanceName[];
     } else {
-      const selectedRank = Number.parseInt(rankSelection.value);
       for (const sub of Object.values(substanceMap)) {
         if (sub.minRank <= selectedRank) {
           substances.push(sub.name);
         }
       }
     }
+
+    const susbtancesMapped: Partial<Record<SubstanceName, boolean>> = {};
+    for (const sub of substances) {
+      susbtancesMapped[sub] = true;
+    }
+    urlParser.setOptimizer({
+      drug: drugDropdown.value as DrugName,
+      rank: selectedRank,
+      substances: susbtancesMapped,
+      depth: steps.valueAsNumber,
+      perStep: serachType.checked,
+    });
 
     setLoading();
     setTimeout(() => {
@@ -53,8 +59,14 @@ export function initOptimizer() {
   if (config) {
     console.log("Found optimizer config:", config);
     drugDropdown.value = config.drug;
+    rankSelection.value = config.rank + "";
+    substanceSelection.hidden = rankSelection.value !== "-1";
     steps.value = config.depth + "";
     serachType.checked = config.perStep;
+
+    for (let i = 0; i < substanceTypes.length; i++) {
+      (<HTMLInputElement>document.querySelector("#substance_" + i)).checked = !!config.substances[substanceTypes[i]];
+    }
   }
 }
 

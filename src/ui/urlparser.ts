@@ -1,6 +1,6 @@
 import { Drug, DrugName, drugNames } from "../data/drug";
 import { EffectName, effectNames } from "../data/effects";
-import { getSubstanceList, substanceIds, substanceMap, SubstanceName } from "../data/substances";
+import { getSubstanceList, substanceIds, substanceMap, SubstanceName, substanceTypes } from "../data/substances";
 
 export const tools = [
   "recipe",
@@ -21,6 +21,8 @@ export type SimulatorState = {
 }
 export type OptimizerState = {
   drug: DrugName,
+  rank: number,
+  substances: Partial<Record<SubstanceName, boolean>>
   depth: number,
   perStep: boolean
 }
@@ -113,22 +115,36 @@ export class DrugUrlParser {
     this.tool = "optimizer";
     if (input.length === 0) return;
 
-    const format = new RegExp(`(${drugRegex})(\\d+)([01])`);
+    const format = new RegExp(`(${drugRegex})(-?\\d+),([01]{${substanceTypes.length}})?,(\\d+),([01])`);
     const match = format.exec(input);
 
     if (match === null) return;
+    
+    const substances: Partial<Record<SubstanceName, boolean>> = {};
+    for (let i = 0; i < substanceTypes.length; i++) {
+      substances[substanceTypes[i]] = match[2] === "-1" ? match[3].charAt(i) === "1" : true;
+    }
 
     this.optimizer = {
       drug: match[1].replaceAll("%20", " ") as DrugName,
-      depth: Number.parseInt(match[2]),
-      perStep: match[3] === "1"
+      rank: Number.parseInt(match[2]),
+      substances,
+      depth: Number.parseInt(match[4]),
+      perStep: match[5] === "1"
     }
   }
 
   public setOptimizer(input: OptimizerState) {
     const parts: [Tool, ...string[]] = ["optimizer"];
     parts.push(input.drug);
+    parts.push(input.rank + "");
+    parts.push(",");
+    for (let i = 0; i < substanceTypes.length; i++) {
+      parts.push(input.substances[substanceTypes[i]] ? "1" : "0");
+    }
+    parts.push(",");
     parts.push(input.depth + "");
+    parts.push(",");
     parts.push(input.perStep ? "1" : "0");
     location.assign("#" + parts.join(""));
   }

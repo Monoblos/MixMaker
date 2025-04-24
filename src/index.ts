@@ -1,4 +1,4 @@
-import { initDrugDropdown, initIngredients, initTargetOptions } from "./ui/initinputs";
+import { initAll } from "./ui/initinputs";
 import { initOptimizer } from "./ui/optimizer";
 import { clear } from "./ui/output";
 import { initRecipe } from "./ui/recipe";
@@ -14,9 +14,7 @@ const tools = {
 document.querySelector
 
 // Init Inputs
-initDrugDropdown();
-initTargetOptions();
-initIngredients();
+initAll();
 
 // Tool selection
 function onToolChange() {

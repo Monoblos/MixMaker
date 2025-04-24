@@ -12,7 +12,7 @@ body > :first-child, #withGraph > *, #simulator > *, #optimizer > * {
   padding: 5px;
 }
 
-#selection {
+#selection, #substanceSelection {
   display: grid;
   grid-template-columns: repeat(
     auto-fit,

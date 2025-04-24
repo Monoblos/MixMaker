@@ -1,6 +1,6 @@
 import { Drug } from "../data/drug";
 import { type EffectName, getEffectId, minimizeEffectList } from "../data/effects";
-import { getListPrice, getSubstanceList, substanceMap, type SubstanceName, substanceTypes } from "../data/substances";
+import { getListPrice, getSubstanceList, Substance, substanceMap, type SubstanceName, substanceTypes as defaultSubstanceTypes } from "../data/substances";
 import Queue from 'yocto-queue';
 import LZString from "lz-string";
 
@@ -141,7 +141,7 @@ export class EfficientMapper {
     }
   }
 
-  private addLayers(queue: Queue<{drug: Drug, subs: SubstanceName[]}>, maxDepth: number, getBaseDrug: () => Drug) {
+  private addLayers(queue: Queue<{drug: Drug, subs: SubstanceName[]}>, maxDepth: number, substanceTypes: SubstanceName[]) {
     let deepestLayer = 0;
     let node;
 
@@ -171,7 +171,7 @@ export class EfficientMapper {
     console.log(`Reched depth ${++deepestLayer} with tree at ${this.nodeCount} nodes.`);
   }
 
-  public init(maxDepth = 5, _: boolean, startDrug: Drug) {
+  public init(maxDepth = 5, _: boolean, startDrug: Drug, substanceTypes?: SubstanceName[]) {
     // Reset variables
     this.knownCombinations = new Map();
     this.mostExpensive = {
@@ -183,12 +183,16 @@ export class EfficientMapper {
       price: 0
     };
 
+    if (!substanceTypes) {
+      substanceTypes = [...defaultSubstanceTypes];
+    }
+
     const queue = new Queue<{drug: Drug, subs: SubstanceName[]}>();
     queue.enqueue({
       drug: startDrug,
       subs: []
     });
-    this.addLayers(queue, maxDepth, () => new Drug(startDrug.baseprice, startDrug.effectList));
+    this.addLayers(queue, maxDepth, substanceTypes);
   }
 
   public findRecipe(drug: Drug, combination: EffectName[]): SubstanceName[] {

@@ -39,20 +39,20 @@ export function getListPrice(substances: string | SubstanceName[]): number {
 
 export class Substance {
   public id: SubstanceId;
-  public constructor(public name: SubstanceName, public price: number, public baseEffect: EffectName, public effectReplacements: Array<[EffectName, EffectName]>) {
+  public constructor(public name: SubstanceName, public price: number, public minRank: number, public baseEffect: EffectName, public effectReplacements: Array<[EffectName, EffectName]>) {
     this.id = name.substring(0, 3);
   }
 }
 
 const substances = [
-  new Substance("Addy", 9, "Thought-Provoking", [
+  new Substance("Addy", 9, 16, "Thought-Provoking", [
     ["Sedating", "Gingeritis"],
     ["Long Faced", "Electrifying"],
     ["Glowing", "Refreshing"],
     ["Foggy", "Energizing"],
     ["Explosive", "Euphoric"]
   ]),
-  new Substance("Banana", 2, "Gingeritis", [
+  new Substance("Banana", 2, 0, "Gingeritis", [
     ["Energizing", "Thought-Provoking"],
     ["Calming", "Sneaky"],
     ["Smelly", "Anti-Gravity"],
@@ -63,7 +63,7 @@ const substances = [
     ["Disorienting", "Focused"],
     ["Paranoia", "Jennerising"],
   ]),
-  new Substance("Battery", 8, "Bright-Eyed", [
+  new Substance("Battery", 8, 14, "Bright-Eyed", [
     ["Munchies", "Tropic Thunder"],
     ["Euphoric", "Zombifying"],
     ["Electrifying", "Euphoric"],
@@ -71,7 +71,7 @@ const substances = [
     ["Cyclopean", "Glowing"],
     ["Shrinking", "Munchies"]
   ]),
-  new Substance("Chili", 7, "Spicy", [
+  new Substance("Chili", 7, 13, "Spicy", [
     ["Athletic", "Euphoric"],
     ["Anti-Gravity", "Tropic Thunder"],
     ["Sneaky", "Bright-Eyed"],
@@ -79,7 +79,7 @@ const substances = [
     ["Laxative", "Long Faced"],
     ["Shrinking", "Refreshing"]
   ]),
-  new Substance("Cuke", 2, "Energizing", [
+  new Substance("Cuke", 2, 0, "Energizing", [
     ["Euphoric", "Laxative"],
     ["Toxic", "Euphoric"],
     ["Munchies", "Athletic"],
@@ -88,7 +88,7 @@ const substances = [
     ["Foggy", "Cyclopean"],
     ["Gingeritis", "Thought-Provoking"],
   ]),
-  new Substance("Donut", 3, "Calorie-Dense", [
+  new Substance("Donut", 3, 0, "Calorie-Dense", [
     ["Calorie-Dense", "Explosive"],
     ["Balding", "Sneaky"],
     ["Anti-Gravity", "Slippery"],
@@ -96,7 +96,7 @@ const substances = [
     ["Focused", "Euphoric"],
     ["Shrinking", "Energizing"]
   ]),
-  new Substance("Energy Drink", 6, "Athletic", [
+  new Substance("Energy Drink", 6, 10, "Athletic", [
     ["Sedating", "Munchies"],
     ["Euphoric", "Energizing"],
     ["Spicy", "Euphoric"],
@@ -107,7 +107,7 @@ const substances = [
     ["Schizophrenia", "Balding"],
     ["Focused", "Shrinking"]
   ]),
-  new Substance("Flu Medicine", 5, "Sedating", [
+  new Substance("Flu Medicine", 5, 8, "Sedating", [
     ["Calming", "Bright-Eyed"],
     ["Munchies", "Slippery"],
     ["Athletic", "Munchies"],
@@ -119,7 +119,7 @@ const substances = [
     ["Electrifying", "Refreshing"],
     ["Shrinking", "Paranoia"]
   ]),
-  new Substance("Gasoline", 5, "Toxic", [
+  new Substance("Gasoline", 5, 9, "Toxic", [
     ["Gingeritis", "Smelly"],
     ["Sneaky", "Tropic Thunder"],
     ["Jennerising", "Sneaky"],
@@ -132,12 +132,12 @@ const substances = [
     ["Electrifying", "Disorienting"],
     ["Shrinking", "Focused"]
   ]),
-  new Substance("Horse Semen", 9, "Long Faced", [
+  new Substance("Horse Semen", 9, 17, "Long Faced", [
     ["Anti-Gravity", "Calming"],
     ["Gingeritis", "Refreshing"],
     ["Thought-Provoking", "Electrifying"]
   ]),
-  new Substance("Iodine", 8, "Jennerising", [
+  new Substance("Iodine", 8, 15, "Jennerising", [
     ["Calming", "Balding"],
     ["Toxic", "Sneaky"],
     ["Foggy", "Paranoia"],
@@ -145,7 +145,7 @@ const substances = [
     ["Euphoric", "Seizure-Inducing"],
     ["Refreshing", "Thought-Provoking"]
   ]),
-  new Substance("Mega Bean", 7, "Foggy", [
+  new Substance("Mega Bean", 7, 12, "Foggy", [
     ["Energizing", "Cyclopean"],
     ["Calming", "Glowing"],
     ["Sneaky", "Calming"],
@@ -159,20 +159,20 @@ const substances = [
     ["Thought-Provoking", "Cyclopean"],
     ["Shrinking", "Electrifying"]
   ]),
-  new Substance("Motor Oil", 6, "Slippery", [
+  new Substance("Motor Oil", 6, 11, "Slippery", [
     ["Munchies", "Schizophrenia"],
     ["Energizing", "Munchies"],
     ["Foggy", "Toxic"],
     ["Euphoric", "Sedating"],
     ["Paranoia", "Anti-Gravity"],
   ]),
-  new Substance("Mouth Wash", 4, "Balding", [
+  new Substance("Mouth Wash", 4, 7, "Balding", [
     ["Calming", "Anti-Gravity"],
     ["Calorie-Dense", "Sneaky"],
     ["Explosive", "Sedating"],
     ["Focused", "Jennerising"]
   ]),
-  new Substance("Paracetamol", 3, "Sneaky", [
+  new Substance("Paracetamol", 3, 0, "Sneaky", [
     ["Calming", "Slippery"],
     ["Toxic", "Tropic Thunder"],
     ["Spicy", "Bright-Eyed"],
@@ -184,7 +184,7 @@ const substances = [
     ["Energizing", "Paranoia"],
     ["Focused", "Gingeritis"]
   ]),
-  new Substance("Viagra", 4, "Tropic Thunder", [
+  new Substance("Viagra", 4, 6, "Tropic Thunder", [
     ["Athletic", "Sneaky"],
     ["Euphoric", "Bright-Eyed"],
     ["Laxative", "Calming"],

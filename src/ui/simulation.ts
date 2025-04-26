@@ -26,6 +26,10 @@ export function initSimulation() {
         styleSheet.deleteRule(0);
       }
     });
+    elem.addEventListener("click", () => {
+      addElement(elem.innerText);
+      recalcSimulation(true);
+    });
   });
   
   dropArea.addEventListener("dragover", dragOverHandler, false);
@@ -139,7 +143,6 @@ function addElement(text: string, insertAt?: number) {
 }
 
 function dropHandler(ev: DragEvent) {
-  const dropArea = <HTMLDivElement>document.querySelector("#simulator #selectedSteps");
   ev.preventDefault();
 
   const text = dragState.text;

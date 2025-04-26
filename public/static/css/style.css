@@ -36,13 +36,31 @@ input[type="number"] {
 
 #stepSelection > div {
   border: 1px solid black;
-  padding: 3px;
   display: flex;
   flex-direction: column;
   min-width: 110px;
 }
 
-#stepSelection > div > p {
+#stepSelection > div:last-child {
+  border-left: none;
+  display: flex;
+  flex-direction: column;
+  min-width: 110px;
+}
+
+#stepSelection > div > div:first-child {
+  padding: 3px;
+  font-weight: bold;
+  border-bottom: 1px solid black;
+}
+
+#stepSelection > div > div:last-child {
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+}
+
+#selectedSteps > p, #ingredients > p {
   border: 1px solid black;
   border-radius: 5px;
   padding: 3px;
@@ -55,6 +73,10 @@ input[type="number"] {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+#selectedSteps > p > :last-child {
+  padding-left: 5px;
 }
 
 .clickable {

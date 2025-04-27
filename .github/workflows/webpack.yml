@@ -3,7 +3,8 @@ name: NodeJS with Webpack
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: [ "master" ]
+    # branches: [ "master" ]
+    branches: [ ]
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:

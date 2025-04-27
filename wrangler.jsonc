@@ -1,0 +1,7 @@
+{
+  "name": "mixmaker",
+  "compatibility_date": "2025-04-27",
+  "assets": {
+    "directory": "./public/"
+  }
+}

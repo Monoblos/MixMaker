@@ -58,6 +58,7 @@ input[type="number"] {
   padding: 3px;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 #selectedSteps > p, #ingredients > p {

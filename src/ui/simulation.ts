@@ -132,7 +132,7 @@ function addElement(text: string, insertAt?: number) {
 
   const children = [...dropArea.children];
   dropArea.innerHTML = "";
-  if (insertAt) {
+  if (insertAt !== undefined) {
     children.splice(insertAt, 0, toAdd);
   } else {
     children.push(toAdd);

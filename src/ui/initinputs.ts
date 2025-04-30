@@ -90,6 +90,7 @@ export function initIngredients() {
     const dndTemplate = document.createElement("p");
     dndTemplate.innerText = substance.name;
     dndTemplate.draggable = true;
+    dndTemplate.title = `Costs ${substance.price}$, unlocks at rank ${ranks[substance.minRank]} and adds ${substance.baseEffect} as well as replacing ${substance.effectReplacements.length} effects.`;
     ingredients.appendChild(dndTemplate);
   }
 }

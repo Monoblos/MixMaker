@@ -1,5 +1,6 @@
 import { DrugName, drugs } from "../data/drug";
 import { substanceMap, SubstanceName } from "../data/substances";
+import { createSimulationElement } from "./initinputs";
 import { showError, showResult } from "./output";
 import { urlParser } from "./urlparser";
 
@@ -15,7 +16,7 @@ const preview = {
 }
 
 export function initSimulation() {
-  const draggableElements = <NodeListOf<HTMLParagraphElement>>document.querySelectorAll("#simulator #ingredients > p");
+  const draggableElements = <NodeListOf<HTMLParagraphElement>>document.querySelectorAll("#simulator #ingredients > *");
   const dropArea = <HTMLDivElement>document.querySelector("#simulator #selectedSteps");
 
   draggableElements.forEach((elem) => {
@@ -53,7 +54,7 @@ export function initSimulation() {
 }
 
 function dragStartHandler(ev: DragEvent) {
-  const text = (<HTMLParagraphElement>ev.target).innerText;
+  const text = (<HTMLDivElement>ev.target).querySelector("p")!.innerText;
   dragState.text = text;
 }
 
@@ -61,7 +62,7 @@ function dragOverHandler(ev: DragEvent) {
   const dropArea = <HTMLDivElement>document.querySelector("#simulator #selectedSteps");
   ev.preventDefault();
 
-  const realTarget = (<HTMLElement>ev.target).closest("p");
+  const realTarget = (<HTMLElement>ev.target).closest("div.selectedIngredient");
   if (realTarget === null) {
     dragState.index = dropArea.childElementCount - 1;
     dragState.after = true;
@@ -86,7 +87,7 @@ function dragOverHandler(ev: DragEvent) {
 }
 
 function updateIndicator() {
-  const cssText = `{ border: 1px solid blue; content: ""; position: absolute; width: 110px; margin-top: ${15 + (32 * dragState.index) + (dragState.after ? 16 : -16)}px; }`;
+  const cssText = `{ border: 1px solid blue; content: ""; position: absolute; width: 110px; margin-top: ${31 + (64 * dragState.index) + (dragState.after ? 32 : -32)}px; }`;
   const styleSheet = document.styleSheets.item(0)!;
   if (styleSheet.cssRules.item(0)?.cssText.startsWith("#selectedSteps::before")) {
     styleSheet.deleteRule(0);
@@ -97,10 +98,7 @@ function updateIndicator() {
 function addElement(text: string, insertAt?: number) {
   const dropArea = <HTMLDivElement>document.querySelector("#simulator #selectedSteps");
 
-  const textContent = document.createElement("span");
-  textContent.innerText = text;
-
-  const xMark = document.createElement("span");
+  const xMark = document.createElement("p");
   xMark.innerText = "X";
   xMark.classList.add("clickable");
   xMark.classList.add("xmark");
@@ -109,8 +107,8 @@ function addElement(text: string, insertAt?: number) {
     recalcSimulation(true);
   });
 
-  const toAdd = document.createElement("p");
-  toAdd.appendChild(textContent);
+  const toAdd = createSimulationElement(text);
+  toAdd.classList.add("selectedIngredient");
   toAdd.appendChild(xMark);
   toAdd.addEventListener("mouseenter", (ev) => {
     const realTarget = (<HTMLElement>ev.target).closest("p");
@@ -164,7 +162,7 @@ function recalcSimulation(setUrl = false) {
 
   let realDrug = drug();
 
-  const selectedSteps = <NodeListOf<HTMLSpanElement>>document.querySelectorAll("#simulator #selectedSteps > p > :first-child");
+  const selectedSteps = <NodeListOf<HTMLSpanElement>>document.querySelectorAll("#simulator #selectedSteps .ingredientLabel");
   const ingredients = [...selectedSteps].map((s) => s.innerText as SubstanceName);
   ingredients.forEach((element, index) => {
     if (index > preview.index) return;

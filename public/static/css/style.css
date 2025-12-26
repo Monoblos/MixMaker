@@ -48,20 +48,34 @@ input[type="number"] {
   min-width: 110px;
 }
 
-#stepSelection > div > div:first-child {
+.columnWithHeader > div:first-child {
   padding: 3px;
   font-weight: bold;
   border-bottom: 1px solid black;
+  user-select: none;
 }
 
-#stepSelection > div > div:last-child {
+.columnWithHeader > div:last-child {
   padding: 3px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-#selectedSteps > p, #ingredients > p {
+#ingredients {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(var(--min-content,160px), max-content)
+  );
+  gap: 5px;
+}
+
+.ingredient {
+  display: flex;
+}
+
+#selectedSteps > p, .ingredient {
   border: 1px solid black;
   border-radius: 5px;
   padding: 3px;
@@ -70,14 +84,19 @@ input[type="number"] {
   cursor: grab;
 }
 
-#selectedSteps > p {
+.selectedIngredient {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
 }
 
-#selectedSteps > p > :last-child {
+.ingredientLabel {
+  flex-grow: 1;
+}
+
+.selectedIngredient > :last-child {
   padding-left: 5px;
+  padding-right: 3px;
+  text-align: right;
 }
 
 .clickable {

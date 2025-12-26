@@ -79,7 +79,7 @@ export const effectMap: Record<EffectName, Effect> = {
   "Foggy": new Effect("Foggy", 0.36, "Fog/Smoke around body. Max sight distance limited"),
   "Gingeritis": new Effect("Gingeritis", 0.2, "Hair changes to red"),
   "Glowing": new Effect("Glowing", 0.48, "Shine bright like a diamond"),
-  "Jennerising": new Effect("Jennerising", 0.42, ),
+  "Jennerising": new Effect("Jennerising", 0.42, "Flips your gender"),
   "Laxative": new Effect("Laxative", 0, "Explosive diarrhea"),
   "Long Faced": new Effect("Long Faced", 0.52, "Head becomes larger"),
   "Munchies": new Effect("Munchies", 0.12),

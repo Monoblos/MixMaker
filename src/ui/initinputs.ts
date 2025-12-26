@@ -86,11 +86,25 @@ export function initSubstanceOptions() {
 
 export function initIngredients() {
   const ingredients = <HTMLDivElement>document.getElementById("ingredients");
+  let i = 0;
   for (const substance of Object.values(substanceMap)) {
-    const dndTemplate = document.createElement("p");
-    dndTemplate.innerText = substance.name;
+    const dndTemplate = createSimulationElement(substance.name);
     dndTemplate.draggable = true;
+    dndTemplate.style.gridColumn = ((i++ % 2) + 1) + "";
     dndTemplate.title = `Costs ${substance.price}$, unlocks at rank ${ranks[substance.minRank]} and adds ${substance.baseEffect} as well as replacing ${substance.effectReplacements.length} effects.`;
     ingredients.appendChild(dndTemplate);
   }
+}
+
+export function createSimulationElement(label: string): HTMLDivElement {
+  const dndTemplate = document.createElement("div");
+  dndTemplate.classList.add("ingredient");
+  const image = document.createElement("img");
+  image.src = `assets/${label.replace(" ", "_")}_Icon.png`;
+  dndTemplate.appendChild(image);
+  const text = document.createElement("p");
+  text.innerText = label;
+  text.classList.add("ingredientLabel");
+  dndTemplate.appendChild(text);
+  return dndTemplate;
 }
